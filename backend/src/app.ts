@@ -1,8 +1,19 @@
 import express from 'express';
-// import itemRoutes from './routes/itemRoutes';
-// import { errorHandler } from './middlewares/errorHandler';
+import cors from 'cors';
+import session from 'express-session';
+
+declare module 'express-session' {
+  interface SessionData {
+    userId: string;
+  }
+}
 
 const app = express();
+
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true
+}));
 
 app.use(express.json());
 
