@@ -1,0 +1,17 @@
+<div class="w-full h-full flex items-center justify-center">
+  <div class="bg-red-500 p-6">
+    <div class="flex gap-1">
+      <div class="cursor-pointer border-b" (click)="setForm('login')">Login</div>
+      <div class="cursor-pointer border-b" (click)="setForm('register')">Register</div>
+    </div>
+    <div>
+      @switch (formType) {
+        @case ('login') {
+          <app-login />
+        } @case ('register') {
+          <app-register />
+        }
+      }
+    </div>
+  </div>
+</div>

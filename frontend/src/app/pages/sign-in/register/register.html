@@ -1,0 +1,67 @@
+<div>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="space-y-4">
+
+    <!-- First Name -->
+    <div>
+      <label class="block text-sm text-gray-700 mb-1">First Name</label>
+      <input
+        type="text"
+        formControlName="firstname"
+        class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400"
+        placeholder="John"
+      />
+    </div>
+    
+    <!-- Last Name -->
+    <div>
+      <label class="block text-sm text-gray-700 mb-1">Last Name</label>
+      <input
+        type="text"
+        formControlName="lastname"
+        class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400"
+        placeholder="Smith"
+      />
+    </div>
+
+    <!-- Email -->
+    <div>
+      <label class="block text-sm text-gray-700 mb-1">Email</label>
+      <input
+        type="email"
+        formControlName="email"
+        class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400"
+        placeholder="you@example.com"
+      />
+    </div>
+
+    <!-- Password -->
+    <div>
+      <label class="block text-sm text-gray-700 mb-1">Password</label>
+      <input
+        type="password"
+        formControlName="password"
+        class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400"
+        placeholder="••••••••"
+      />
+    </div>
+
+    <!-- Confirm Password -->
+    <div>
+      <label class="block text-sm text-gray-700 mb-1">Confirm password</label>
+      <input
+        type="password"
+        formControlName="confirmPassword"
+        class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400"
+        placeholder="••••••••"
+      />
+    </div>
+
+    <button
+      type="submit"
+      class="w-full bg-gray-900 text-white text-sm rounded py-2 hover:bg-gray-700 transition-colors"
+    >
+      Create account
+    </button>
+
+  </form>
+</div>

@@ -1,0 +1,22 @@
+<div>
+  <!-- <p>{{  }}</p> -->
+  <p>{{ month.date.getFullYear() }}</p>
+  <p>{{ month.text }}</p>
+  <div (click)="incrementMonth(-1)">-1</div>
+  <div (click)="incrementMonth(+1)">+1</div>
+</div>
+<div class="w-full h-195 p-4">
+  <table class="w-full h-full table-fixed">
+    @for (row of days; track $index) {
+      <tr>
+        @for (d of row; track d) {
+          <td class="border p-4" (click)="viewDay(d)">Day {{ d }}</td>
+        }
+      </tr>
+    }
+  </table>
+</div>
+
+@if (showReceipt) {
+  <app-receipt-modal [date]=month.date/>
+}

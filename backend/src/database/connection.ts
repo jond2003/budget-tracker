@@ -1,4 +1,3 @@
-
 import { MongoClient, ServerApiVersion } from 'mongodb';
 import { Databases, DB_URI } from '../constants/db.constants';
 

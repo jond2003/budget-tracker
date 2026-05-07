@@ -35,6 +35,8 @@
   "dependencies": {
     "@types/cors": "^2.8.19",
     "@types/express-session": "^1.19.0",
+    "connect-mongo": "^6.0.0",
+    "cors": "^2.8.6",
     "express-session": "^1.19.0",
     "mongodb": "^7.2.0"
   }
