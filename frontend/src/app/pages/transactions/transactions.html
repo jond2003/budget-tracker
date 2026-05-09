@@ -1,0 +1,64 @@
+<div>
+  <form [formGroup]="form" (ngSubmit)="addTransaction()">
+
+    <div>
+      <label for="label">Label</label>
+      <input
+        id="label"
+        type="text"
+        formControlName="label"
+        placeholder="Enter a label"
+      />
+    </div>
+
+    <div>
+      <label for="category">Category</label>
+      <input
+        id="category"
+        type="text"
+        formControlName="category"
+        placeholder="Enter a category"
+      />
+    </div>
+
+    <div>
+      <label for="amount">Amount</label>
+      <input
+        id="amount"
+        type="number"
+        formControlName="amount"
+        min="0"
+        placeholder="0.00"
+      />
+    </div>
+
+    <div>
+      <label for="payment_date">Payment Date</label>
+      <input
+        id="payment_date"
+        type="date"
+        formControlName="payment_date"
+        [value]="form.get('payment_date')?.value | date:'yyyy-MM-dd'"
+      />
+    </div>
+
+    <button type="submit" [disabled]="form.invalid">Submit</button>
+
+  </form>
+</div>
+
+<div>
+  <br>
+  <div>Transactions</div>
+  <br>
+  <div class="flex flex-col gap-2">
+    @for (t of transactions(); track $index) {
+      <div>
+        <p>{{ t.label }}</p>
+        <p>{{ t.category }}</p>
+        <p>£{{ t.amount }}</p>
+        <p>{{ t.payment_date | date }}</p>
+      </div>
+    }
+  </div>
+</div>

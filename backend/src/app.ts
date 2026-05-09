@@ -8,6 +8,10 @@ import { Databases, DB_URI } from './constants/db.constants';
 import { errorHandler } from './middlewares/errorHandler';
 import userRoutes from './routes/userRoutes';
 import authRoutes from './routes/authRoutes';
+import transactionRoutes from './routes/transactionRoutes';
+import incomeRoutes from './routes/incomeRoutes';
+import categoryRoutes from './routes/categoryRoutes';
+import calendarRoutes from './routes/calendarRoutes';
 
 declare module 'express-session' {
   interface SessionData {
@@ -46,6 +50,12 @@ app.use(session({
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
+
+app.use('/api/transactions', transactionRoutes);
+app.use('/api/incomes', incomeRoutes);
+app.use('/api/categories', categoryRoutes);
+
+app.use('/api/calendar', calendarRoutes);
 
 // Global error handler (should be after routes)
 app.use(errorHandler);

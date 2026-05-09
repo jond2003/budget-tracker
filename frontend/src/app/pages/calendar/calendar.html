@@ -1,4 +1,13 @@
 <div>
+  <div>
+    <p>Income this month (income earned last month): £{{ income() }}</p>
+    <p>Spent (total of transactions): £{{ expenses() }}</p>
+    <p>Budget (player-set budget): £{{ 3 }}</p>
+    <p>Cash left for this month (income - spent): £{{ income() - expenses() }}</p>
+    <p>Cumulative total (money left over added together since first payment): £{{ 4 }}</p>
+  </div>
+</div>
+<div>
   <!-- <p>{{  }}</p> -->
   <p>{{ month.date.getFullYear() }}</p>
   <p>{{ month.text }}</p>

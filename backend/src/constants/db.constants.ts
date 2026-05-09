@@ -15,4 +15,5 @@ export namespace Collections {
   export const TRANSACTIONS = 'transactions';
   export const INCOME = 'income';
   export const RECURRING = 'recurring';
+  export const CATEGORIES = 'categories';
 }

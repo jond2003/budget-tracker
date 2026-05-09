@@ -1,10 +1,10 @@
 import { ObjectId } from "mongodb";
-import { Category } from "./category";
 
 export interface Transaction {
   _id?: ObjectId;
   user_id: ObjectId;
-  category_id: Category;
+  label: string;
+  category: string;
   amount: number;
   recurring_id?: ObjectId;
   payment_date: Date;

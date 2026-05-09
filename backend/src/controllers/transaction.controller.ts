@@ -14,20 +14,34 @@ export const getTransactions = async (req: Request, res: Response, next: NextFun
   }
 }
 
+export const getMonthTransactions = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = new ObjectId(req.session.userId);
+    const date = new Date(req.params.date! as string);
+    const transactions = await TransactionsCollection.getTransactionsByMonth(userId, date) || [];
+
+    res.send(transactions).status(200);
+  } catch (err) {
+    next(err);
+  }
+}
+
 export const createTransaction = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = new ObjectId(req.session.userId);
-    const { category_id, amount, recurring_id, payment_date } = req.body;
+    const { category, amount, label, recurring_id, payment_date } = req.body;
 
     const newTransaction: Transaction = {
       user_id: userId,
       amount,
-      category_id,
+      label,
+      category,
       recurring_id,
-      payment_date
+      payment_date: new Date(payment_date)
     };
 
-    const result = await TransactionsCollection.createTransaction(newTransaction)
+    const result = await TransactionsCollection.createTransaction(newTransaction);
+    if (result) res.send(result).status(200);
   } catch (err) {
     next(err); 
   }

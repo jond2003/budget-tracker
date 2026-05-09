@@ -20,7 +20,7 @@ export class LoginService {
     return this.http.post(url, body, {responseType: 'text'});
   }
 
-  public login(formData: FormGroup): Observable<string> {
+  public login(formData: FormGroup): Observable<Object> {
     const email = formData.get('email')?.value as string;
     const password = formData.get('password')?.value as string;
     const details: UserModel.LoginUser = {
@@ -28,11 +28,11 @@ export class LoginService {
       password
     }
 
-    const res = this.http.post(API.LOGIN, details, { responseType: 'text', withCredentials: true });
+    const res = this.http.post(API.LOGIN, details, { withCredentials: true });
     return res;
   }
 
-  public register(formData: FormGroup): Observable<string> {
+  public register(formData: FormGroup): Observable<Object> {
     const email = formData.get('email')?.value as string;
     const firstname = formData.get('firstname')?.value as string;
     const lastname = formData.get('lastname')?.value as string;
@@ -44,7 +44,7 @@ export class LoginService {
       password
     }
 
-    const res = this.http.post(API.REGISTER, details, { responseType: 'text', withCredentials: true });
+    const res = this.http.post(API.REGISTER, details, { withCredentials: true });
     return res;
   }
 }
