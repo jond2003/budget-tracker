@@ -1,31 +1,52 @@
 <div>
   <div>
-    <p>Income this month (income earned last month): £{{ income() }}</p>
-    <p>Spent (total of transactions): £{{ expenses() }}</p>
-    <p>Budget (player-set budget): £{{ 3 }}</p>
-    <p>Cash left for this month (income - spent): £{{ income() - expenses() }}</p>
-    <p>Cumulative total (money left over added together since first payment): £{{ 4 }}</p>
+    <p>Income (income earned last month): £{{ income() }}</p>
+    <p>Expenses (total of transactions): £{{ expenses() }}</p>
+    <p>Budget (user-set budget): £{{ 3 }}</p>
+    <p>Balance (income - spent): £{{ income() - expenses() }}</p>
+    <p>Cumulative total (balance left over added together since first payment): £{{ 4 }}</p>
   </div>
 </div>
-<div>
-  <!-- <p>{{  }}</p> -->
-  <p>{{ month.date.getFullYear() }}</p>
-  <p>{{ month.text }}</p>
-  <div (click)="incrementMonth(-1)">-1</div>
-  <div (click)="incrementMonth(+1)">+1</div>
-</div>
-<div class="w-full h-195 p-4">
-  <table class="w-full h-full table-fixed">
-    @for (row of days; track $index) {
-      <tr>
-        @for (d of row; track d) {
-          <td class="border p-4" (click)="viewDay(d)">Day {{ d }}</td>
+
+<div class="flex">
+  <div class="flex-1">Hello</div>
+  <div class="mx-4 flex-1">
+    <div class="flex justify-center gap-8">
+      <div (click)="incrementMonth(-1)" class="text-2xl font-bold cursor-pointer"><</div>
+      <p class="text-2xl font-bold">{{ month.text + " " + month.date.getFullYear() }}</p>
+      <div (click)="incrementMonth(+1)" class="text-2xl font-bold cursor-pointer">></div>
+    </div>
+    <div class="w-full h-195 pt-4">
+      <table class="w-full table-fixed">
+        <tr>
+          @for (wd of ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']; track $index) {
+            <th>{{ wd }}</th>
+          }
+        </tr>
+        @for (row of days; track $index) {
+          <tr>
+            @for (d of row; track d) {
+              @if (d > 0) {
+                <td class="border p-4" [ngClass]="month.date.getDate() == d ? 'bg-orange-200' : getRealCurrentDay() == d ? 'bg-gray-300' : ''" (click)="viewDay(d)">
+                  <div>
+                    <p class="font-bold">{{ d }}</p>
+                    <p>{{ getDayTransactions(d).length }} transaction{{ getDayTransactions(d).length == 1 ? "" : "s"  }}</p>
+                    <div class="flex justify-between">
+                      <p class="text-red-700 font-bold">£{{ getDayTransactions(d).reduce((acc, v) => acc + v.amount, 0) }}</p>
+                      <p class="text-green-700 font-bold">£{{ getDayIncomes(d).reduce((acc, v) => acc + v.amount, 0) }}</p>
+                    </div>
+                  </div>
+                </td>
+              } @else { <td></td> }
+            }
+          </tr>
         }
-      </tr>
-    }
-  </table>
+      </table>
+    </div>
+  </div>
 </div>
 
+
 @if (showReceipt) {
-  <app-receipt-modal [date]=month.date/>
+  <app-receipt-modal [date]=month.date />
 }
