@@ -50,15 +50,5 @@
 <div>
   <br>
   <div>Transactions</div>
-  <br>
-  <div class="flex flex-col gap-2">
-    @for (t of transactions(); track $index) {
-      <div>
-        <p>{{ t.label }}</p>
-        <p>{{ t.category }}</p>
-        <p>£{{ t.amount }}</p>
-        <p>{{ t.payment_date | date }}</p>
-      </div>
-    }
-  </div>
+  <app-payments-list [payments]="transactions()" showDate />
 </div>

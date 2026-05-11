@@ -27,6 +27,7 @@ export class Calendar {
   expenses = computed(() => this.transactions().reduce((acc: number, c: any) => acc + c.amount, 0));
 
   showReceipt = false;
+  selectedDay = 0;
 
   constructor(private calendarService: CalendarService, private http: HttpClient) {
     this.updateMonth();
@@ -43,6 +44,7 @@ export class Calendar {
     for (let i = 0; i < arr.length; i += 7) {
       this.days.push(arr.slice(i, i + 7));
     }
+    console.log(this.getDayWeekOffset(), this.days);
     this.getMonthIncomes();
     this.getMonthTransactions();
     this.getPendingIncomes();
@@ -51,11 +53,13 @@ export class Calendar {
   incrementMonth(i: number): void {
     let d = new Date(this.calendarService.getYear(), this.calendarService.getMonth() + i, this.calendarService.getDate().getDate());
     this.calendarService.setDate(d);
+    this.selectedDay = 0;
     this.updateMonth();
   }
 
   viewDay(d: number): void {
     this.showReceipt = true;
+    this.selectedDay = d;
     this.month.date.setDate(d);
   }
 
@@ -65,6 +69,10 @@ export class Calendar {
 
   getRealCurrentDay(): number {
     return (new Date()).getDate();
+  }
+
+  isRealCurrentMonth(): boolean {
+    return (new Date()).getMonth() == this.month.date.getMonth();
   }
 
   getDayOfWeek(d: number): number {
@@ -80,7 +88,7 @@ export class Calendar {
       this.calendarService.getYear(),
       this.calendarService.getMonth(),
       1);
-    return date.getDay() - 1;
+    return (date.getDay() + 6) % 7;
   }
 
   getDayTransactions(day: number): any[] {

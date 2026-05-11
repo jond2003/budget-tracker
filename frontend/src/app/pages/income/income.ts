@@ -3,10 +3,11 @@ import { API } from '../../constants/api.constants';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
+import { PaymentsList } from "../../components/payments-list/payments-list";
 
 @Component({
   selector: 'app-income',
-  imports: [ReactiveFormsModule, DatePipe],
+  imports: [ReactiveFormsModule, DatePipe, PaymentsList],
   templateUrl: './income.html',
   styleUrl: './income.css',
 })

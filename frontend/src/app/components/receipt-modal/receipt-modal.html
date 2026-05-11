@@ -1,1 +1,12 @@
-<p>Showing day {{ date().getDate() }}</p>
+<div>
+  <p>Day {{ date().getDate() }}</p>
+
+  <div>
+    
+  <div>Transactions</div>
+  <app-payments-list [payments]="transactions()" />
+
+  <br>
+  <div>Pending Income</div>
+  <app-payments-list [payments]="incomes()" />
+</div>

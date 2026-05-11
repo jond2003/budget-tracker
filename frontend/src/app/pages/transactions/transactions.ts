@@ -3,10 +3,11 @@ import { Component, signal } from '@angular/core';
 import { API } from '../../constants/api.constants';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
+import { PaymentsList } from "../../components/payments-list/payments-list";
 
 @Component({
   selector: 'app-transactions',
-  imports: [ReactiveFormsModule, DatePipe],
+  imports: [ReactiveFormsModule, DatePipe, PaymentsList],
   templateUrl: './transactions.html',
   styleUrl: './transactions.css',
 })
