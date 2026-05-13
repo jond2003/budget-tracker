@@ -8,7 +8,7 @@
   @for (t of payments(); track $index) {
     <tr class="border">
       <td class="p-2">{{ t.label }}</td>
-      <td class="p-2">{{ t.category }}</td>
+      <td class="p-2">{{ categories().find(v => v._id == t.category_id)?.name }}</td>
       <td class="p-2">£{{ t.amount }}</td>
       @if (showDate()) { <td class="p-2">{{ t.payment_date | date }}</td> }
     </tr>

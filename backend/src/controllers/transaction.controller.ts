@@ -6,11 +6,25 @@ import { Transaction } from "../models/transaction";
 export const getTransactions = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = new ObjectId(req.session.userId);
-    const transactions = await TransactionsCollection.getTransactionsByUserId(userId) || [];
+    let transactions = await TransactionsCollection.getTransactionsByUserId(userId) || [];
 
     res.send(transactions).status(200);
   } catch (err) {
-    next(err); 
+    next(err);
+  }
+}
+
+export const getCategoryTransactions = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = new ObjectId(req.session.userId);
+    console.log(req.params.category_id);
+    const category_id = req.params.category_id! as string;
+    console.log(category_id.toString());
+    let transactions = await TransactionsCollection.getTransactionsByCategory(userId, category_id) || [];
+
+    res.send(transactions).status(200);
+  } catch (err) {
+    next(err);
   }
 }
 
@@ -26,16 +40,29 @@ export const getMonthTransactions = async (req: Request, res: Response, next: Ne
   }
 }
 
+export const getMonthCategoryTransactions = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = new ObjectId(req.session.userId);
+    const date = new Date(req.params.date! as string);
+    const category_id = req.params.category_id! as string;
+    const transactions = await TransactionsCollection.getCategoryTransactionsByMonth(userId, date, category_id) || [];
+
+    res.send(transactions).status(200);
+  } catch (err) {
+    next(err);
+  }
+}
+
 export const createTransaction = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = new ObjectId(req.session.userId);
-    const { category, amount, label, recurring_id, payment_date } = req.body;
+    const { category_id, amount, label, recurring_id, payment_date } = req.body;
 
     const newTransaction: Transaction = {
       user_id: userId,
       amount,
       label,
-      category,
+      category_id,
       recurring_id,
       payment_date: new Date(payment_date)
     };
@@ -43,7 +70,7 @@ export const createTransaction = async (req: Request, res: Response, next: NextF
     const result = await TransactionsCollection.createTransaction(newTransaction);
     if (result) res.send(result).status(200);
   } catch (err) {
-    next(err); 
+    next(err);
   }
 }
 
@@ -54,7 +81,7 @@ export const getTransactionById = async (req: Request, res: Response, next: Next
     if (!transaction) res.send("Not found").status(404);
     else res.send(transaction).status(200);
   } catch (err) {
-    next(err); 
+    next(err);
   }
 }
 
@@ -65,6 +92,6 @@ export const deleteTransaction = async (req: Request, res: Response, next: NextF
     if (!deletedTransaction) res.send("Not found").status(404);
     else res.send(deletedTransaction).status(200);
   } catch (err) {
-    next(err); 
+    next(err);
   }
 }

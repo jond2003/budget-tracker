@@ -20,6 +20,11 @@ export namespace TransactionsCollection {
   export const getTransactionsByUserId = async (user_id: ObjectId): Promise<Transaction[]> => {
     return await collection.find({ user_id }).toArray();
   }
+
+  // Get all transactions within a category created by the same user using their user ID
+  export const getTransactionsByCategory = async (user_id: ObjectId, category_id: string): Promise<Transaction[]> => {
+    return await collection.find({ user_id, category_id }).toArray();
+  }
   
   // Get all the user's transactions from the given month
   export const getTransactionsByMonth = async (user_id: ObjectId, date: Date): Promise<Transaction[]> => {
@@ -28,6 +33,17 @@ export namespace TransactionsCollection {
     return await collection.find({
       user_id,
       payment_date: { $gte: startOfMonth, $lt: startOfNextMonth }
+    }).toArray();
+  }
+  
+  // Get all the user's transactions from the given month for a particular category
+  export const getCategoryTransactionsByMonth = async (user_id: ObjectId, date: Date, category_id: string): Promise<Transaction[]> => {
+    const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+    const startOfNextMonth = new Date(date.getFullYear(), date.getMonth() + 1, 1);
+    return await collection.find({
+      user_id,
+      payment_date: { $gte: startOfMonth, $lt: startOfNextMonth },
+      category_id
     }).toArray();
   }
 

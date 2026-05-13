@@ -1,0 +1,24 @@
+<div>
+  <form [formGroup]="form" (ngSubmit)="addCategory()">
+
+    <div>
+      <label for="name">Name</label>
+      <input
+        id="name"
+        type="text"
+        formControlName="name"
+        placeholder="Enter a new category name"
+      />
+    </div>
+    <button type="submit" [disabled]="form.invalid">Submit</button>
+
+  </form>
+</div>
+
+<div>
+  <br>
+  <div>Categories:</div>
+  @for (cat of categories(); track $index) {
+    <p>{{ cat.name }}</p>
+  }
+</div>

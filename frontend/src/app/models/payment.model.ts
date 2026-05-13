@@ -1,6 +1,6 @@
 export interface Payment {
   label: string;
-  category: string;
+  category_id: string;
   amount: number;
   payment_date: Date;
 }

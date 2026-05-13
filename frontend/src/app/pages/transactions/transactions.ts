@@ -13,7 +13,10 @@ import { PaymentsList } from "../../components/payments-list/payments-list";
 })
 export class Transactions {
   form: FormGroup;
+  catForm: FormGroup;
   transactions = signal([] as any);
+  filteredTransactions = signal([] as any);
+  categories = signal([] as any);
 
   constructor(private fb: FormBuilder, private http: HttpClient) {
     this.form = this.fb.group({
@@ -22,7 +25,11 @@ export class Transactions {
       amount: [0, [Validators.required, Validators.min(0)]],
       payment_date: [new Date(), [Validators.required]],
     });
+    this.catForm = this.fb.group({
+      category_id: ['', [Validators.required, Validators.minLength(1)]]
+    })
     this.getTransactions();
+    this.getCategories();
   }
 
   getTransactions() {
@@ -36,12 +43,12 @@ export class Transactions {
 
   addTransaction() {
     const label = this.form.get('label')?.value as string;
-    const category = this.form.get('category')?.value as string;
+    const category_id = this.form.get('category')?.value as string;
     const amount = this.form.get('amount')?.value as number;
     const payment_date = this.form.get('payment_date')?.value as number;
     const details = {
       label,
-      category,
+      category_id,
       amount,
       payment_date
     }
@@ -49,6 +56,25 @@ export class Transactions {
     this.http.post(API.TRANSACTIONS_BASE_URL, details, { responseType: 'text', withCredentials: true }).subscribe(
       (res) => {
         console.log(res);
+      }
+    );
+  }
+
+  getCategories() {
+    this.http.get(API.CATEGORIES_BASE_URL, { responseType: 'json', withCredentials: true }).subscribe(
+      (res) => {
+        this.categories.set(res as any);
+        console.log(res);
+      }
+    );
+  }
+
+  getTransactionsByCategory() {
+    const categoryId = this.catForm.get('category_id')?.value as string;
+    this.http.get(API.CATEGORY_TRANSACTIONS + categoryId, { responseType: 'json', withCredentials: true }).subscribe(
+      (res) => {
+        this.filteredTransactions.set(res as any);
+        console.log(this.filteredTransactions());
       }
     );
   }

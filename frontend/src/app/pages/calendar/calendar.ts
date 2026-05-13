@@ -121,7 +121,7 @@ export class Calendar {
   }
   
   getMonthTransactions() {
-    this.http.get(API.TRANSACTIONS_BASE_URL + this.month.date, { responseType: 'json', withCredentials: true }).subscribe(
+    this.http.get(API.MONTH_TRANSACTIONS + this.month.date, { responseType: 'json', withCredentials: true }).subscribe(
       (res) => {
         this.transactions.set(res as any);
       }

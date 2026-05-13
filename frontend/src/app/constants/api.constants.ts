@@ -10,6 +10,11 @@ export  namespace API {
   export const REGISTER = USER_BASE_URL + 'register/';
 
   export const TRANSACTIONS_BASE_URL = BASE_URL + 'transactions/';
+  export const CATEGORY_TRANSACTIONS = TRANSACTIONS_BASE_URL + 'category/';
+  export const MONTH_TRANSACTIONS = TRANSACTIONS_BASE_URL + 'month/';
+  export const MONTH_CATEGORY_TRANSACTIONS = (date: string, category_id: string) => {
+    return MONTH_TRANSACTIONS + date + '/' + CATEGORY_TRANSACTIONS + category_id;
+  };
 
   export const INCOMES_BASE_URL = BASE_URL + 'incomes/';
 

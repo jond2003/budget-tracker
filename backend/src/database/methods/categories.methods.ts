@@ -3,7 +3,7 @@ import { Collections } from "../../constants/db.constants";
 import db from "../connection";
 import { Category } from "../../models/category";
 
-const collection = db.collection<Category>(Collections.TRANSACTIONS);
+const collection = db.collection<Category>(Collections.CATEGORIES);
 
 export namespace CategoriesCollection {
   // Create a category document

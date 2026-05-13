@@ -13,12 +13,17 @@
 
     <div>
       <label for="category">Category</label>
-      <input
+      <select
         id="category"
         type="text"
         formControlName="category"
         placeholder="Enter a category"
-      />
+
+      >
+        @for (cat of categories(); track $index) {
+          <option [value]="cat._id" >{{ cat.name }}</option>
+        }
+      </select>
     </div>
 
     <div>
@@ -51,4 +56,31 @@
   <br>
   <div>Transactions</div>
   <app-payments-list [payments]="transactions()" showDate />
+</div>
+
+<div>
+  <form [formGroup]="catForm" (ngSubmit)="getTransactionsByCategory()">
+    <div>
+      <label for="category_id">Category</label>
+      <select
+        id="category_id"
+        type="text"
+        formControlName="category_id"
+        placeholder="Enter a category"
+      >
+        @for (cat of categories(); track $index) {
+          <option [value]="cat._id" >{{ cat.name }}</option>
+        }
+      </select>
+    </div>
+
+    <button type="submit">Submit</button>
+
+  </form>
+</div>
+
+<div>
+  <br>
+  <div>Filtered Transactions</div>
+  <app-payments-list [payments]="filteredTransactions()" showDate />
 </div>
