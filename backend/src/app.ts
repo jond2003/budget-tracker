@@ -12,6 +12,7 @@ import transactionRoutes from './routes/transactionRoutes';
 import incomeRoutes from './routes/incomeRoutes';
 import categoryRoutes from './routes/categoryRoutes';
 import calendarRoutes from './routes/calendarRoutes';
+import budgetRoutes from './routes/budgetRoutes';
 
 declare module 'express-session' {
   interface SessionData {
@@ -54,6 +55,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/incomes', incomeRoutes);
 app.use('/api/categories', categoryRoutes);
+app.use('/api/budget', budgetRoutes);
 
 app.use('/api/calendar', calendarRoutes);
 

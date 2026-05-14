@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, input, signal } from '@angular/core';
+import { booleanAttribute, Component, computed, input, signal } from '@angular/core';
 import { Payment } from '../../models/payment.model';
 import { DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
@@ -15,6 +15,7 @@ export class PaymentsList {
   showDate = input(false, {
     transform: booleanAttribute
   });
+  totalAmount = computed(() => this.payments().reduce((acc: number, c: any) => acc + c.amount, 0));
   
   categories = signal([] as any);
 

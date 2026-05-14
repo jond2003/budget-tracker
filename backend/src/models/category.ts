@@ -4,4 +4,6 @@ export interface Category {
   _id?: ObjectId;
   user_id: ObjectId;
   name: string;
+  colour: string;
+  budget_id?: ObjectId | string;
 }

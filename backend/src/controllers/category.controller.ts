@@ -17,11 +17,12 @@ export const getCategories = async (req: Request, res: Response, next: NextFunct
 export const createCategory = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = new ObjectId(req.session.userId);
-    const { name } = req.body;
+    const { name, colour } = req.body;
 
     const newCategory: Category = {
       user_id: userId,
       name,
+      colour
     };
 
     const result = await CategoriesCollection.createCategory(newCategory);
