@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, signal } from '@angular/core';
-import { API } from '../../constants/api.constants';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CategoriesApiService } from '../../services/api/categories/categories-api.service';
+import { Category } from '../../models/category.model';
 
 @Component({
   selector: 'app-categories',
@@ -10,39 +10,28 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
   styleUrl: './categories.css',
 })
 export class Categories {
-  categories = signal([] as any);
+  categories = signal<Category[]>([]);
   form: FormGroup;
 
-  constructor(private http: HttpClient, private fb: FormBuilder) {
+  constructor(private categoryApiService: CategoriesApiService, private fb: FormBuilder) {
     this.form = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(1)]],
+      payment_type: ['transaction', [Validators.required, Validators.minLength(1)]],
       colour: ['#000000', [Validators.required]]
     });
     this.getCategories();
   }
 
   getCategories() {
-    this.http.get(API.CATEGORIES_BASE_URL, { responseType: 'json', withCredentials: true }).subscribe(
-      (res) => {
-        this.categories.set(res as any);
-        console.log(res);
-      }
-    );
+    this.categoryApiService.getCategories().subscribe((res) => this.categories.set(res));
   }
 
   addCategory() {
-    const name = this.form.get('name')?.value as string;
-    const colour = this.form.get('colour')?.value as string;
-    const details = {
-      name,
-      colour
+    const newCategory: Category = {
+      name: this.form.get('name')?.value as string,
+      payment_type: this.form.get('payment_type')?.value,
+      colour: this.form.get('colour')?.value as string
     }
-    this.http.post(API.CATEGORIES_BASE_URL, details, { responseType: 'json', withCredentials: true }).subscribe(
-      (res) => {
-        console.log(res);
-        // Note: update redux state whenever new category added
-        this.getCategories();
-      }
-    );
+    this.categoryApiService.createCategory(newCategory).subscribe(() => this.getCategories());
   }
 }

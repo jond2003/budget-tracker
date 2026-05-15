@@ -19,6 +19,8 @@ export  namespace API {
   export const INCOMES_BASE_URL = BASE_URL + 'incomes/';
 
   export const CATEGORIES_BASE_URL = BASE_URL + 'categories/';
+  export const INCOME_CATEGORIES = CATEGORIES_BASE_URL + 'income/';
+  export const TRANSACTIONS_CATEGORIES = CATEGORIES_BASE_URL + 'transaction/';
 
   export const BUDGETS_BASE_URL = BASE_URL + 'budget/';
   export const MONTH_BUDGET = BUDGETS_BASE_URL + 'month/';

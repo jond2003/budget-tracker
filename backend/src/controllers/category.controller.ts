@@ -17,12 +17,13 @@ export const getCategories = async (req: Request, res: Response, next: NextFunct
 export const createCategory = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = new ObjectId(req.session.userId);
-    const { name, colour } = req.body;
+    const { name, colour, payment_type } = req.body;
 
     const newCategory: Category = {
       user_id: userId,
       name,
-      colour
+      colour,
+      payment_type
     };
 
     const result = await CategoriesCollection.createCategory(newCategory);
@@ -40,6 +41,28 @@ export const getCategoryByName = async (req: Request, res: Response, next: NextF
 
     if (!category) res.send("Not found").status(404);
     else res.send(category).status(200);
+  } catch (err) {
+    next(err); 
+  }
+}
+
+export const getIncomeCategories = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = new ObjectId(req.session.userId);
+    const categories = await CategoriesCollection.getCategoriesByType(userId, 'income') || [];
+
+    res.send(categories).status(200);
+  } catch (err) {
+    next(err); 
+  }
+}
+
+export const getTransactionCategories = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = new ObjectId(req.session.userId);
+    const categories = await CategoriesCollection.getCategoriesByType(userId, 'transaction') || [];
+
+    res.send(categories).status(200);
   } catch (err) {
     next(err); 
   }

@@ -29,13 +29,13 @@ export const getMonthIncomes = async (req: Request, res: Response, next: NextFun
 export const createIncome = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = new ObjectId(req.session.userId);
-    const { category, amount, label, recurring_id, payment_date } = req.body;
+    const { category_id, amount, label, recurring_id, payment_date } = req.body;
 
     const newIncome: Income = {
       user_id: userId,
       amount,
       label,
-      category,
+      category_id,
       recurring_id,
       payment_date: new Date(payment_date)
     };

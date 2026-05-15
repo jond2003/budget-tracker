@@ -17,9 +17,7 @@ export const getTransactions = async (req: Request, res: Response, next: NextFun
 export const getCategoryTransactions = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = new ObjectId(req.session.userId);
-    console.log(req.params.category_id);
     const category_id = req.params.category_id! as string;
-    console.log(category_id.toString());
     let transactions = await TransactionsCollection.getTransactionsByCategory(userId, category_id) || [];
 
     res.send(transactions).status(200);

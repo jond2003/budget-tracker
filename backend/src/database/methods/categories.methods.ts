@@ -21,6 +21,11 @@ export namespace CategoriesCollection {
     return await collection.find({ user_id }).toArray();
   }
 
+  // Get all categories of give type created by the same user using their user ID
+  export const getCategoriesByType = async (user_id: ObjectId, payment_type: 'income' | 'transaction'): Promise<Category[]> => {
+    return await collection.find({ user_id, payment_type }).toArray();
+  }
+
   // Delete a category given the ID
   export const deleteCategory = async (_id: ObjectId): Promise<Category | null> => {
     return await collection.findOneAndDelete({ _id });
