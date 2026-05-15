@@ -1,13 +1,21 @@
 <div>
   <form [formGroup]="form" (ngSubmit)="addCategory()">
-
     <div>
-      <label for="name">Name</label>
+      <label for="name">Name: </label>
       <input
         id="name"
         type="text"
         formControlName="name"
         placeholder="Enter a new category name"
+      />
+    </div>
+    
+    <div>
+      <label for="colour">Pick a colour: </label>
+      <input
+        id="colour"
+        type="color"
+        formControlName="colour"
       />
     </div>
     <button type="submit" [disabled]="form.invalid">Submit</button>
@@ -18,7 +26,12 @@
 <div>
   <br>
   <div>Categories:</div>
-  @for (cat of categories(); track $index) {
-    <p>{{ cat.name }}</p>
-  }
+  <div class="rounded-r-sm w-fit overflow-hidden">
+    @for (cat of categories(); track $index) {
+      <div class="flex justify-between gap-1">
+        <p>{{ cat.name }}</p>
+        <p class="w-2 " [style.background-color]="cat.colour"></p>
+      </div>
+    }
+  </div>
 </div>

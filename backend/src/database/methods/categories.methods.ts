@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
 import { Collections } from "../../constants/db.constants";
-import db from "../connection";
 import { Category } from "../../models/category";
+import { db } from "../connection";
 
 const collection = db.collection<Category>(Collections.CATEGORIES);
 

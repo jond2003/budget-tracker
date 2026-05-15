@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
 import { Collections } from "../../constants/db.constants";
-import db from "../connection";
 import { Budget } from "../../models/budget";
+import { db } from "../connection";
 
 const collection = db.collection<Budget>(Collections.BUDGETS);
 

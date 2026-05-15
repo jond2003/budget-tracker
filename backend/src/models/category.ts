@@ -5,5 +5,4 @@ export interface Category {
   user_id: ObjectId;
   name: string;
   colour: string;
-  budget_id?: ObjectId | string;
 }

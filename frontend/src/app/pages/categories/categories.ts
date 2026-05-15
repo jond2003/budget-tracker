@@ -2,10 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Component, signal } from '@angular/core';
 import { API } from '../../constants/api.constants';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-categories',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, NgClass],
   templateUrl: './categories.html',
   styleUrl: './categories.css',
 })
@@ -15,7 +16,8 @@ export class Categories {
 
   constructor(private http: HttpClient, private fb: FormBuilder) {
     this.form = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(1)]]
+      name: ['', [Validators.required, Validators.minLength(1)]],
+      colour: ['#000000', [Validators.required]]
     });
     this.getCategories();
   }
@@ -31,8 +33,10 @@ export class Categories {
 
   addCategory() {
     const name = this.form.get('name')?.value as string;
+    const colour = this.form.get('colour')?.value as string;
     const details = {
-      name
+      name,
+      colour
     }
     this.http.post(API.CATEGORIES_BASE_URL, details, { responseType: 'json', withCredentials: true }).subscribe(
       (res) => {

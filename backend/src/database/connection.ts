@@ -1,5 +1,5 @@
 import { MongoClient, ServerApiVersion } from 'mongodb';
-import { Databases, DB_URI } from '../constants/db.constants';
+import { Collections, Databases, DB_URI } from '../constants/db.constants';
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(DB_URI, {
@@ -10,17 +10,26 @@ const client = new MongoClient(DB_URI, {
   }
 });
 
-try {
-  // Connect the client to the server	(optional starting in v4.7)
-  client.connect();
-  // Send a ping to confirm a successful connection
-  client.db(Databases.ADMIN).command({ ping: 1 });
+const initIndexes = async () => {
+  // Categories
+  const categories = db.collection(Collections.CATEGORIES);
+  await categories.createIndex(
+    { name: 1 },
+    { unique: true }
+  );
+};
+
+const connectToDatabase = async () => {
+  await client.connect();
+  await client.db(Databases.ADMIN).command({ ping: 1 });
+  await initIndexes();
   console.log("Pinged your deployment. You successfully connected to MongoDB!");
-} finally {
-  // Ensures that the client will close when you finish/error
+};
+
+connectToDatabase().catch(err => {
+  console.error("Failed to connect to MongoDB:", err);
   client.close();
-}
+  process.exit(1);
+});
 
-const db = client.db(Databases.EXPENSES_DATA);
-
-export default db;
+export const db = client.db(Databases.EXPENSES_DATA);
