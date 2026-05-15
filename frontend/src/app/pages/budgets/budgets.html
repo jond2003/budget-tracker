@@ -1,0 +1,86 @@
+<div>
+  <form [formGroup]="form" (ngSubmit)="createBudget()">
+
+    <div>
+      <label for="name">Name</label>
+      <input
+        id="name"
+        type="text"
+        formControlName="name"
+        placeholder="Enter a name"
+      />
+    </div>
+
+    <div>
+      <label for="category_id">Category</label>
+      <select
+        id="category_id"
+        type="text"
+        formControlName="category_id"
+        placeholder="Pick a category"
+
+      >
+        @for (cat of categories(); track $index) {
+          <option [value]="cat._id" >{{ cat.name }}</option>
+        }
+      </select>
+    </div>
+
+    <div>
+      <label for="amount">Amount £</label>
+      <input
+        id="amount"
+        type="number"
+        formControlName="amount"
+        min="0"
+        placeholder="0.00"
+      />
+    </div>
+
+    <div>
+      <label for="start_date">Start Date</label>
+      <input
+        id="start_date"
+        type="date"
+        formControlName="start_date"
+        [value]="form.get('start_date')?.value | date:'yyyy-MM-dd'"
+      />
+    </div>
+
+    <div>
+      <label for="end_date">End Date</label>
+      <input
+        id="end_date"
+        type="date"
+        formControlName="end_date"
+        [value]="form.get('end_date')?.value | date:'yyyy-MM-dd'"
+      />
+    </div>
+
+    <button type="submit" [disabled]="form.invalid">Submit</button>
+
+  </form>
+</div>
+
+<div>
+  <br>
+  <p>Budgets:</p>
+  <table>
+    <tr>
+      <th class="p-2">Name</th>
+      <th class="p-2">Category</th>
+      <th class="p-2">Amount</th>
+      <th class="p-2">Start Date</th>
+      <th class="p-2">End Date</th>
+    </tr>
+    @for (b of budgets(); track $index) {
+      <tr>
+        <td class="p-2">{{ b.name }}</td>
+        <td class="p-2">{{ categories().find(v => v._id == b.category_id)?.name }}</td>
+        <td class="p-2">£{{ b.amount }}</td>
+        <td class="p-2">{{ b.start_date | date}}</td>
+        <td class="p-2">{{ b.end_date | date}}</td>
+      </tr>
+    }
+  </table>
+</div>

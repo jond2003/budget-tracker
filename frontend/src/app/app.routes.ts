@@ -6,6 +6,7 @@ import { AppRoutes } from './constants/routes';
 import { Transactions } from './pages/transactions/transactions';
 import { Income } from './pages/income/income';
 import { Categories } from './pages/categories/categories';
+import { Budgets } from './pages/budgets/budgets';
 
 export const routes: Routes = [
   {
@@ -28,5 +29,9 @@ export const routes: Routes = [
   {
     path: AppRoutes.CATEGORIES,
     component: Categories
+  },
+  {
+    path: AppRoutes.BUDGETS,
+    component: Budgets
   }
 ];

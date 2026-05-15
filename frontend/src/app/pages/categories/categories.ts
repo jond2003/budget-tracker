@@ -2,11 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Component, signal } from '@angular/core';
 import { API } from '../../constants/api.constants';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-categories',
-  imports: [ReactiveFormsModule, NgClass],
+  imports: [ReactiveFormsModule],
   templateUrl: './categories.html',
   styleUrl: './categories.css',
 })

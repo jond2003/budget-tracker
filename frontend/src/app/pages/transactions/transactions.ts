@@ -17,6 +17,7 @@ export class Transactions {
   transactions = signal([] as any);
   filteredTransactions = signal([] as any);
   categories = signal([] as any);
+  budgets = signal([] as any);
 
   constructor(private fb: FormBuilder, private http: HttpClient) {
     this.form = this.fb.group({
@@ -68,6 +69,15 @@ export class Transactions {
       }
     );
   }
+  
+  getBudgets(category_id: string) {
+    this.http.get(API.CATEGORY_BUDGETS + category_id, { responseType: 'json', withCredentials: true }).subscribe(
+      (res) => {
+        this.budgets.set(res as any);
+        console.log(res);
+      }
+    );
+  }
 
   getTransactionsByCategory() {
     const categoryId = this.catForm.get('category_id')?.value as string;
@@ -75,6 +85,7 @@ export class Transactions {
       (res) => {
         this.filteredTransactions.set(res as any);
         console.log(this.filteredTransactions());
+        this.getBudgets(categoryId);
       }
     );
   }

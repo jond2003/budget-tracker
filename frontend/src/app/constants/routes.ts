@@ -3,6 +3,7 @@ export namespace AppRoutes {
   export const TRANSACTIONS = 'transactions';
   export const INCOME = 'incomes';
   export const CATEGORIES = 'cats';
+  export const BUDGETS = 'budgets';
 
   export const LOGIN = 'login';
 }

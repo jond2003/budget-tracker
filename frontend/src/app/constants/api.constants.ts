@@ -13,10 +13,17 @@ export  namespace API {
   export const CATEGORY_TRANSACTIONS = TRANSACTIONS_BASE_URL + 'category/';
   export const MONTH_TRANSACTIONS = TRANSACTIONS_BASE_URL + 'month/';
   export const MONTH_CATEGORY_TRANSACTIONS = (date: string, category_id: string) => {
-    return MONTH_TRANSACTIONS + date + '/' + CATEGORY_TRANSACTIONS + category_id;
+    return MONTH_TRANSACTIONS + date + '/category/' + category_id;
   };
 
   export const INCOMES_BASE_URL = BASE_URL + 'incomes/';
 
   export const CATEGORIES_BASE_URL = BASE_URL + 'categories/';
+
+  export const BUDGETS_BASE_URL = BASE_URL + 'budget/';
+  export const MONTH_BUDGET = BUDGETS_BASE_URL + 'month/';
+  export const CATEGORY_BUDGETS = BUDGETS_BASE_URL + 'category/';
+  export const MONTH_CATEGORY_BUDGET = (date: string, category_id: string) => {
+    return MONTH_BUDGET + date + '/category/' + category_id;
+  };
 }

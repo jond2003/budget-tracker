@@ -6,7 +6,7 @@ import { Budget } from "../models/budget";
 export const getGeneralBudgets = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = new ObjectId(req.session.userId);
-    const budgets = await BudgetsCollection.getBudgetsByUserId(userId) || [];
+    const budgets = await BudgetsCollection.getGeneralBudgetsById(userId) || [];
 
     res.send(budgets).status(200);
   } catch (err) {
@@ -54,10 +54,11 @@ export const getMonthCategoryBudget = async (req: Request, res: Response, next: 
 export const createBudget = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = new ObjectId(req.session.userId);
-    const { amount, start_date, end_date, category_id } = req.body;
+    const { amount, name, start_date, end_date, category_id } = req.body;
 
     const newBudget: Budget = {
       user_id: userId,
+      name,
       amount,
       start_date,
       end_date,

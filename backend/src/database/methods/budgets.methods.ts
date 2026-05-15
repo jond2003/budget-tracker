@@ -76,6 +76,17 @@ export namespace BudgetsCollection {
     });
   }
 
+  // Get all general budgets by user id
+  export const getGeneralBudgetsById = async (user_id: ObjectId): Promise<Budget[]> => {
+    return await collection.find({
+      user_id,
+      $or: [
+        { category_id: { $exists: false } },
+        { category_id: null }
+      ]
+    }).toArray();
+  }
+
   // Get all budgets created by the same user using their user ID
   export const getBudgetsByUserId = async (user_id: ObjectId): Promise<Budget[]> => {
     return await collection.find({ user_id }).toArray();
