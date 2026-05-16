@@ -12,13 +12,17 @@
     </div>
 
     <div>
-      <label for="category">Category</label>
-      <input
-        id="category"
+      <label for="category_id">Category</label>
+      <select
+        id="category_id"
         type="text"
-        formControlName="category"
-        placeholder="Enter a category"
-      />
+        formControlName="category_id"
+        placeholder="Pick a category"
+      >
+        @for (cat of categories(); track $index) {
+          <option [value]="cat._id" >{{ cat.name }}</option>
+        }
+      </select>
     </div>
 
     <div>

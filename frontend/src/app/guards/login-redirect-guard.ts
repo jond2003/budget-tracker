@@ -9,12 +9,7 @@ export const loginRedirectGuard: CanActivateFn = (route, state) => {
   const http = inject(HttpClient);
   const router = inject(Router);
 
-  return http.get<{ authenticated: boolean }>(
-    API.AUTH_USER,
-    {
-      withCredentials: true
-    }
-  ).pipe(
+  return http.get<{ authenticated: boolean }>(API.AUTH_USER, { withCredentials: true }).pipe(
     map(() => router.createUrlTree(['/'+AppRoutes.TRANSACTIONS])),
     catchError(() => of(true))
   );

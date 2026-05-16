@@ -56,7 +56,7 @@ export class Transactions {
   }
 
   getCategories() {
-    this.categoryApiService.getCategories().subscribe((res) => this.categories.set(res as any));
+    this.categoryApiService.getTransactionCategories().subscribe((res) => this.categories.set(res as any));
   }
   
   getBudgets(category_id: string) {

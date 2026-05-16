@@ -12,15 +12,7 @@ export class LoginService {
 
   constructor(private http: HttpClient) { }
 
-  getData(url: string) {
-    return this.http.get(url, {responseType: 'text'});
-  }
-
-  postData(url: string, body: any) {
-    return this.http.post(url, body, {responseType: 'text'});
-  }
-
-  public login(formData: FormGroup): Observable<Object> {
+  login(formData: FormGroup): Observable<Object> {
     const email = formData.get('email')?.value as string;
     const password = formData.get('password')?.value as string;
     const details: UserModel.LoginUser = {
@@ -32,7 +24,7 @@ export class LoginService {
     return res;
   }
 
-  public register(formData: FormGroup): Observable<Object> {
+  register(formData: FormGroup): Observable<Object> {
     const email = formData.get('email')?.value as string;
     const firstname = formData.get('firstname')?.value as string;
     const lastname = formData.get('lastname')?.value as string;
@@ -46,5 +38,9 @@ export class LoginService {
 
     const res = this.http.post(API.REGISTER, details, { withCredentials: true });
     return res;
+  }
+
+  logout(): Observable<Object> {
+    return this.http.post(API.LOGOUT, {}, { withCredentials: true });
   }
 }

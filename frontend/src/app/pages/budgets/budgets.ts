@@ -3,6 +3,7 @@ import { Component, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { API } from '../../constants/api.constants';
 import { DatePipe } from '@angular/common';
+import { CategoriesApiService } from '../../services/api/categories/categories-api.service';
 
 @Component({
   selector: 'app-budgets',
@@ -15,7 +16,11 @@ export class Budgets {
   budgets = signal([] as any);
   form: FormGroup;
 
-  constructor(private http: HttpClient, private fb: FormBuilder) {
+  constructor(
+    private categoryApiService: CategoriesApiService,
+    private http: HttpClient,
+    private fb: FormBuilder
+  ) {
     this.form = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(1)]],
       amount: [0, [Validators.required, Validators.min(0)]],
@@ -37,12 +42,7 @@ export class Budgets {
   }
 
   getCategories() {
-    this.http.get(API.CATEGORIES_BASE_URL, { responseType: 'json', withCredentials: true }).subscribe(
-      (res) => {
-        this.categories.set(res as any);
-        console.log(res);
-      }
-    );
+    this.categoryApiService.getTransactionCategories().subscribe((res) => this.categories.set(res as any));
   }
 
   createBudget() {
