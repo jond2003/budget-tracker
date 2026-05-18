@@ -1,0 +1,58 @@
+<div>
+  <form [formGroup]="form" (ngSubmit)="addIncome()">
+
+    <div>
+      <label for="label">Label</label>
+      <input
+        id="label"
+        type="text"
+        formControlName="label"
+        placeholder="Enter a label"
+      />
+    </div>
+
+    <div>
+      <label for="category_id">Category</label>
+      <select
+        id="category_id"
+        type="text"
+        formControlName="category_id"
+        placeholder="Pick a category"
+      >
+        @for (cat of categories(); track $index) {
+          <option [value]="cat._id" >{{ cat.name }}</option>
+        }
+      </select>
+    </div>
+
+    <div>
+      <label for="amount">Amount</label>
+      <input
+        id="amount"
+        type="number"
+        formControlName="amount"
+        min="0"
+        placeholder="0.00"
+      />
+    </div>
+
+    <div>
+      <label for="payment_date">Payment Date</label>
+      <input
+        id="payment_date"
+        type="date"
+        formControlName="payment_date"
+        [value]="form.get('payment_date')?.value | date:'yyyy-MM-dd'"
+      />
+    </div>
+
+    <button type="submit" [disabled]="form.invalid">Submit</button>
+
+  </form>
+</div>
+
+<div>
+  <br>
+  <div>Incomes</div>
+  <app-payments-list [payments]="incomes()" showDate />
+</div>

@@ -1,0 +1,10 @@
+<div class="flex justify-between p-2">
+  <div class="flex">
+    @for (item of navLinks; track $index) {
+      <div class="cursor-pointer p-2" [routerLink]="item.route">{{ item.label }}</div>
+    }
+  </div>
+  <div>
+    <button (click)="logout()" class="cursor-pointer p-2">Logout</button>
+  </div>
+</div>

@@ -1,12 +1,11 @@
 import { ObjectId } from "mongodb";
-import { Recurring } from "./recurring";
-import { Category } from "./category";
 
 export interface Income {
   _id?: ObjectId;
   user_id: ObjectId;
-  category_id: Category;
+  label: string;
+  category_id: ObjectId | string;
   amount: number;
-  recurring?: Recurring;
+  recurring_id?: ObjectId;
   payment_date: Date;
 }

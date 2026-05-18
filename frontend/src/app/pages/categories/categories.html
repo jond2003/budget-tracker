@@ -1,0 +1,52 @@
+<div>
+  <form [formGroup]="form" (ngSubmit)="addCategory()">
+    <div>
+      <label for="name">Name: </label>
+      <input
+        id="name"
+        type="text"
+        formControlName="name"
+        placeholder="Enter a new category name"
+      />
+    </div>
+
+    <div>
+      <label for="payment_type">Payment Type</label>
+      <select
+        id="payment_type"
+        type="text"
+        formControlName="payment_type"
+        placeholder="Pick a Payment Type"
+
+      >
+        <option value="transaction" >Transaction</option>
+        <option value="income" >Income</option>
+      </select>
+    </div>
+    
+    <div>
+      <label for="colour">Pick a colour: </label>
+      <input
+        id="colour"
+        type="color"
+        formControlName="colour"
+      />
+    </div>
+    <button type="submit" [disabled]="form.invalid">Submit</button>
+
+  </form>
+</div>
+
+<div>
+  <br>
+  <div>Categories:</div>
+  <div class="w-fit">
+    @for (cat of categories(); track $index) {
+      <div class="flex justify-start gap-1">
+        <p>{{ cat.name }}</p>
+        <p class="w-2" [style.background-color]="cat.colour"></p>
+        <p>{{ cat.payment_type }}</p>
+      </div>
+    }
+  </div>
+</div>

@@ -2,7 +2,7 @@ import { ObjectId } from "mongodb";
 import { Collections } from "../../constants/db.constants";
 import { User } from "../../models/user";
 import { genSalt, hashPassword } from "../../utils/security.utils";
-import db from "../connection";
+import { db } from "../connection";
 
 const collection = db.collection<User>(Collections.USERS);
 

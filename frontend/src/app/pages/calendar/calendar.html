@@ -1,0 +1,51 @@
+<div>
+  <div>
+    <p>Income (income earned last month): £{{ income() }}</p>
+    <p>Expenses (total of transactions): £{{ expenses() }}</p>
+    <p>Budget (user-set budget): £{{ 3 }}</p>
+    <p>Balance (income - spent): £{{ income() - expenses() }}</p>
+    <p>Cumulative total (balance left over added together since first payment): £{{ 4 }}</p>
+  </div>
+</div>
+
+<div class="mx-4 flex bg-mist-900 px-6 py-8 rounded-2xl gap-4">
+  <div class="flex-1 bg-orange-500 rounded-2xl p-4">
+    @if (selectedDay) {
+      <app-receipt-modal [date]=month.date [transactions]="getDayTransactions(selectedDay)" [incomes]="getDayIncomes(selectedDay)" />
+    }
+  </div>
+  <div class="flex-1 bg-gray-100 p-4 rounded-2xl">
+    <div class="flex justify-center gap-8">
+      <div (click)="incrementMonth(-1)" class="text-2xl font-bold cursor-pointer"><</div>
+      <p class="text-2xl font-bold">{{ month.text + " " + month.date.getFullYear() }}</p>
+      <div (click)="incrementMonth(+1)" class="text-2xl font-bold cursor-pointer">></div>
+    </div>
+    <div class="w-full mt-4">
+      <table class="w-full table-fixed border-separate border-spacing-2">
+        <tr>
+          @for (wd of ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']; track $index) {
+            <th>{{ wd }}</th>
+          }
+        </tr>
+        @for (row of days; track $index) {
+          <tr>
+            @for (d of row; track d) {
+              @if (d > 0) {
+                <td class="px-4 py-3 rounded-md text-sm cursor-pointer" [ngClass]="selectedDay == d ? 'bg-orange-200 text-black' : isRealCurrentMonth() && getRealCurrentDay() == d ? 'bg-gray-300 text-black' : 'bg-mist-800 text-white'" (click)="viewDay(d)">
+                  <div>
+                    <p class="font-bold">{{ d }}</p>
+                    <!-- <p>{{ getDayTransactions(d).length }} transaction{{ getDayTransactions(d).length == 1 ? "" : "s"  }}</p> -->
+                  </div>
+                  <div class="flex justify-between">
+                    <p class="text-red-700 font-bold">£{{ getDayTransactions(d).reduce((acc, v) => acc + v.amount, 0) }}</p>
+                    <p class="text-green-700 font-bold">£{{ getDayIncomes(d).reduce((acc, v) => acc + v.amount, 0) }}</p>
+                  </div>
+                </td>
+              } @else { <td></td> }
+            }
+          </tr>
+        }
+      </table>
+    </div>
+  </div>
+</div>
