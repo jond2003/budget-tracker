@@ -17,6 +17,11 @@ export  namespace API {
   };
 
   export const INCOMES_BASE_URL = BASE_URL + 'incomes/';
+  export const CATEGORY_INCOMES = INCOMES_BASE_URL + 'category/';
+  export const MONTH_INCOMES = INCOMES_BASE_URL + 'month/';
+  export const MONTH_CATEGORY_INCOMES = (date: string, category_id: string) => {
+    return MONTH_INCOMES + date + '/category/' + category_id;
+  };
 
   export const CATEGORIES_BASE_URL = BASE_URL + 'categories/';
   export const INCOME_CATEGORIES = CATEGORIES_BASE_URL + 'income/';

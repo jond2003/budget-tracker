@@ -4,6 +4,9 @@ import { ReceiptModal } from '../../components/receipt-modal/receipt-modal';
 import { HttpClient } from '@angular/common/http';
 import { API } from '../../constants/api.constants';
 import { NgClass } from '@angular/common';
+import { IncomeApiService } from '../../services/api/income/income-api.service';
+import { TransactionsApiService } from '../../services/api/transactions/transactions-api.service';
+import { CategoriesApiService } from '../../services/api/categories/categories-api.service';
 
 @Component({
   selector: 'app-calendar',
@@ -29,7 +32,12 @@ export class Calendar {
   showReceipt = false;
   selectedDay = 0;
 
-  constructor(private calendarService: CalendarService, private http: HttpClient) {
+  constructor(
+    private incomeApiService: IncomeApiService,
+    private transactionApiService: TransactionsApiService,
+    private categoryApiService: CategoriesApiService,
+    private calendarService: CalendarService,
+  ) {
     this.updateMonth();
   }
 
@@ -105,7 +113,7 @@ export class Calendar {
       this.calendarService.getMonth()-1,
       this.calendarService.getDate().getDate()
     );
-    this.http.get(API.INCOMES_BASE_URL + prevMonth, { responseType: 'json', withCredentials: true }).subscribe(
+    this.incomeApiService.getIncomesByMonth(prevMonth).subscribe(
       (res) => {
         this.incomes.set(res as any);
       }
@@ -113,7 +121,7 @@ export class Calendar {
   }
   
   getPendingIncomes() {
-    this.http.get(API.INCOMES_BASE_URL + this.month.date, { responseType: 'json', withCredentials: true }).subscribe(
+    this.incomeApiService.getIncomesByMonth(this.month.date).subscribe(
       (res) => {
         this.pendingIncomes.set(res as any);
       }
@@ -121,7 +129,7 @@ export class Calendar {
   }
   
   getMonthTransactions() {
-    this.http.get(API.MONTH_TRANSACTIONS + this.month.date, { responseType: 'json', withCredentials: true }).subscribe(
+    this.transactionApiService.getIncomesByMonth(this.month.date).subscribe(
       (res) => {
         this.transactions.set(res as any);
       }

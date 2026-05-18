@@ -15,6 +15,7 @@ export class TransactionsApiService {
   };
 
   private catsTrns: Record<string, Store<Payment>> = {}
+  private monthTrxns: Record<string, Store<Payment>> = {}
 
   constructor(private http: HttpClient) { }
 
@@ -47,5 +48,21 @@ export class TransactionsApiService {
     this.catsTrns[category_id].data = this.http.get<Payment[]>(API.CATEGORY_TRANSACTIONS + category_id, { responseType: 'json', withCredentials: true });
     this.catsTrns[category_id].update = false;
     return this.catsTrns[category_id].data;
+  }
+
+  getIncomesByMonth(date: Date, forceUpdate = false): Observable<Payment[]> {
+    const key = date.getMonth() + '/' + date.getFullYear();
+    // Create store if not created already
+    if (!this.monthTrxns[key]) {
+      this.monthTrxns[key] = {
+        data: of([]),
+        update: true
+      };
+    }
+
+    if (!this.monthTrxns[key].update && !forceUpdate) return this.monthTrxns[key].data;
+    this.monthTrxns[key].data = this.http.get<Payment[]>(API.MONTH_TRANSACTIONS + date, { responseType: 'json', withCredentials: true });
+    this.monthTrxns[key].update = false;
+    return this.monthTrxns[key].data
   }
 }

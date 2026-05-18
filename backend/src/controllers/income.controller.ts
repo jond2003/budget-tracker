@@ -58,6 +58,31 @@ export const getIncomeById = async (req: Request, res: Response, next: NextFunct
   }
 }
 
+export const getMonthCategoryIncomes = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = new ObjectId(req.session.userId);
+    const date = new Date(req.params.date! as string);
+    const category_id = req.params.category_id! as string;
+    const incomes = await IncomesCollection.getCategoryIncomesByMonth(userId, date, category_id) || [];
+
+    res.send(incomes).status(200);
+  } catch (err) {
+    next(err);
+  }
+}
+
+export const getCategoryIncomes = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = new ObjectId(req.session.userId);
+    const category_id = req.params.category_id! as string;
+    const incomes = await IncomesCollection.getIncomesByCategory(userId, category_id) || [];
+
+    res.send(incomes).status(200);
+  } catch (err) {
+    next(err);
+  }
+}
+
 export const deleteIncome = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const deletedIncome = await IncomesCollection.deleteIncome(new ObjectId(req.params.id![0]));

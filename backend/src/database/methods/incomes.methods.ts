@@ -30,6 +30,22 @@ export namespace IncomesCollection {
       payment_date: { $gte: startOfMonth, $lt: startOfNextMonth }
     }).toArray();
   }
+    
+  // Get all the user's incomes from the given month for a particular category
+  export const getCategoryIncomesByMonth = async (user_id: ObjectId, date: Date, category_id: string): Promise<Income[]> => {
+    const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+    const startOfNextMonth = new Date(date.getFullYear(), date.getMonth() + 1, 1);
+    return await collection.find({
+      user_id,
+      payment_date: { $gte: startOfMonth, $lt: startOfNextMonth },
+      category_id
+    }).toArray();
+  }
+  
+  // Get all incomes within a category created by the same user using their user ID
+  export const getIncomesByCategory = async (user_id: ObjectId, category_id: string): Promise<Income[]> => {
+    return await collection.find({ user_id, category_id }).toArray();
+  }
 
   // Delete a income given the ID
   export const deleteIncome = async (_id: ObjectId): Promise<Income | null> => {
