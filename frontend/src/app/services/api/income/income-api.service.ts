@@ -65,4 +65,13 @@ export class IncomeApiService {
     this.monthIncomes[key].update = false;
     return this.monthIncomes[key].data
   }
+
+  deleteIncome(income: Payment): Observable<any> {
+    const date = new Date(income.payment_date);
+    const key = date.getMonth() + '/' + date.getFullYear();
+    this.incomes.update = true;
+    if (this.monthIncomes[key]) this.monthIncomes[key].update = true;
+    if (this.catsIncomes[income.category_id]) this.catsIncomes[income.category_id].update = true;
+    return this.http.delete(API.INCOMES_BASE_URL + income._id, { responseType: 'json', withCredentials: true });
+  }
 }

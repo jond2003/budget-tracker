@@ -4,18 +4,20 @@
     <th class="p-2">Category</th>
     <th class="p-2">Amount</th>
     @if (showDate()) { <th class="p-2">Date</th> }
+    <th class="p-2 text-right">Delete?</th>
   </tr>
   @for (t of payments(); track $index) {
-    <tr class="border">
+    <tr class="border" [ngClass]="disableRow() == $index ? 'pointer-events-none' : 'pointer-events-auto'">
       <td class="p-2">{{ t.label }}</td>
       <td class="p-2">{{ categories().find(v => v._id == t.category_id)?.name }}</td>
-      <td class="p-2">£{{ t.amount }}</td>
+      <td class="p-2">{{ t.amount | currency: 'GBP' }}</td>
       @if (showDate()) { <td class="p-2">{{ t.payment_date | date }}</td> }
+      <td class="p-2 text-right cursor-pointer" (click)="deleteRow($index)">O</td>
     </tr>
   }
   <tr class="border font-bold">
     <td class="p-2">Total</td>
     <td class="p-2"></td>
-    <td class="p-2">£{{ totalAmount() }}</td>
+    <td class="p-2">{{ totalAmount() | currency: 'GBP' }}</td>
   </tr>
 </table>

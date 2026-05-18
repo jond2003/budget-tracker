@@ -4,9 +4,9 @@
   <div>
     
   <div>Transactions</div>
-  <app-payments-list [payments]="transactions()" />
+  <app-payments-list [payments]="transactions()" (onDeleteRow)="deleteTransaction($event)" [disableRow]="disableTransactionRow" />
 
   <br>
   <div>Pending Income</div>
-  <app-payments-list [payments]="incomes()" />
+  <app-payments-list [payments]="incomes()" (onDeleteRow)="deleteIncome($event)" [disableRow]="disableTransactionRow" />
 </div>

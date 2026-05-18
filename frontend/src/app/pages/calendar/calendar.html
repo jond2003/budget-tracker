@@ -1,10 +1,10 @@
 <div>
   <div>
-    <p>Income (income earned last month): £{{ income() }}</p>
-    <p>Expenses (total of transactions): £{{ expenses() }}</p>
-    <p>Budget (user-set budget): £{{ 3 }}</p>
-    <p>Balance (income - spent): £{{ income() - expenses() }}</p>
-    <p>Cumulative total (balance left over added together since first payment): £{{ 4 }}</p>
+    <p>Income (income earned last month): {{ income() | currency: 'GBP' }}</p>
+    <p>Expenses (total of transactions): {{ expenses() | currency: 'GBP' }}</p>
+    <p>Budget (user-set budget): {{ 3 | currency: 'GBP' }}</p>
+    <p>Balance (income - spent): {{ income() - expenses() | currency: 'GBP' }}</p>
+    <p>Cumulative total (balance left over added together since first payment): {{ 4 | currency: 'GBP' }}</p>
   </div>
 </div>
 
@@ -36,9 +36,9 @@
                     <p class="font-bold">{{ d }}</p>
                     <!-- <p>{{ getDayTransactions(d).length }} transaction{{ getDayTransactions(d).length == 1 ? "" : "s"  }}</p> -->
                   </div>
-                  <div class="flex justify-between">
-                    <p class="text-red-700 font-bold">£{{ getDayTransactions(d).reduce((acc, v) => acc + v.amount, 0) }}</p>
-                    <p class="text-green-700 font-bold">£{{ getDayIncomes(d).reduce((acc, v) => acc + v.amount, 0) }}</p>
+                  <div class="min-h-10">
+                    @if (getDayTransactions(d).reduce((acc, v) => acc + v.amount, 0)) { <p class="text-red-700 ">-{{ getDayTransactions(d).reduce((acc, v) => acc + v.amount, 0) | number:'1.2-2' }}</p> }
+                    @if (getDayIncomes(d).reduce((acc, v) => acc + v.amount, 0)) { <p class="text-green-700">+{{ getDayIncomes(d).reduce((acc, v) => acc + v.amount, 0) | number:'1.2-2' }}</p> }
                   </div>
                 </td>
               } @else { <td></td> }

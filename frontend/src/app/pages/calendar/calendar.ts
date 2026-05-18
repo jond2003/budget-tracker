@@ -1,16 +1,14 @@
 import { Component, computed, signal } from '@angular/core';
 import { CalendarService } from '../../services/calendar/calendar';
 import { ReceiptModal } from '../../components/receipt-modal/receipt-modal';
-import { HttpClient } from '@angular/common/http';
-import { API } from '../../constants/api.constants';
-import { NgClass } from '@angular/common';
+import { CurrencyPipe, DecimalPipe, NgClass } from '@angular/common';
 import { IncomeApiService } from '../../services/api/income/income-api.service';
 import { TransactionsApiService } from '../../services/api/transactions/transactions-api.service';
 import { CategoriesApiService } from '../../services/api/categories/categories-api.service';
 
 @Component({
   selector: 'app-calendar',
-  imports: [ReceiptModal, NgClass],
+  imports: [ReceiptModal, NgClass, CurrencyPipe, DecimalPipe],
   templateUrl: './calendar.html',
   styleUrl: './calendar.css',
 })

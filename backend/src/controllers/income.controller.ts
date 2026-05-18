@@ -85,9 +85,9 @@ export const getCategoryIncomes = async (req: Request, res: Response, next: Next
 
 export const deleteIncome = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const deletedIncome = await IncomesCollection.deleteIncome(new ObjectId(req.params.id![0]));
+    const deletedIncome = await IncomesCollection.deleteIncome(new ObjectId(req.params.id! as string));
 
-    if (!deletedIncome) res.send("Not found").status(404);
+    if (!deletedIncome) res.json("Not found").status(404);
     else res.send(deletedIncome).status(200);
   } catch (err) {
     next(err);

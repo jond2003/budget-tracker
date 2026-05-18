@@ -1,12 +1,12 @@
-import { booleanAttribute, Component, computed, input, signal } from '@angular/core';
+import { booleanAttribute, Component, computed, input, output, signal } from '@angular/core';
 import { Payment } from '../../models/payment.model';
-import { DatePipe } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { API } from '../../constants/api.constants';
+import { CurrencyPipe, DatePipe, NgClass } from '@angular/common';
+import { CategoriesApiService } from '../../services/api/categories/categories-api.service';
+import { Category } from '../../models/category.model';
 
 @Component({
   selector: 'app-payments-list',
-  imports: [DatePipe],
+  imports: [DatePipe, CurrencyPipe, NgClass],
   templateUrl: './payments-list.html',
   styleUrl: './payments-list.css',
 })
@@ -15,19 +15,28 @@ export class PaymentsList {
   showDate = input(false, {
     transform: booleanAttribute
   });
-  totalAmount = computed(() => this.payments().reduce((acc: number, c: any) => acc + c.amount, 0));
-  
-  categories = signal([] as any);
+  disableRow = input<number>(-1);
 
-  constructor(private http: HttpClient) {
+  totalAmount = computed(() => this.payments().reduce((acc: number, c: any) => acc + c.amount, 0));
+
+  onDeleteRow = output<number>();
+  
+  categories = signal<Category[]>([]);
+
+  constructor(private categoryApiService: CategoriesApiService) {
     this.getCategories();
   }
   
   getCategories() {
-    this.http.get(API.CATEGORIES_BASE_URL, { responseType: 'json', withCredentials: true }).subscribe(
+    this.categoryApiService.getCategories().subscribe(
       (res) => {
         this.categories.set(res as any);
       }
     );
+  }
+  
+  deleteRow(index: number) {
+    console.log("Deleting row", index);
+    this.onDeleteRow.emit(index);
   }
 }
