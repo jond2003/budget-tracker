@@ -45,13 +45,14 @@ export class Transactions {
     this.transactionApiService.getTransactions().subscribe((res) => this.transactions.set(res as any));
   }
 
-  addTransaction() {
+  createTransaction(form: FormGroup): void {
     const transaction: Payment = {
-      label: this.form.get('label')?.value as string,
-      category_id: this.form.get('category')?.value as string,
-      amount: this.form.get('amount')?.value as number,
-      payment_date: this.form.get('payment_date')?.value as number
+      label: form.get('label')?.value as string,
+      category_id: form.get('category_id')?.value as string,
+      amount: form.get('amount')?.value as number,
+      payment_date: form.get('payment_date')?.value as number
     }
+    console.log(transaction);
     this.transactionApiService.createTransaction(transaction).subscribe(() => this.getTransactions());
   }
 

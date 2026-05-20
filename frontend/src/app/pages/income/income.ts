@@ -1,14 +1,13 @@
 import { Component, signal } from '@angular/core';
-import { API } from '../../constants/api.constants';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
-import { DatePipe } from '@angular/common';
 import { PaymentsList } from "../../components/payments-list/payments-list";
 import { CategoriesApiService } from '../../services/api/categories/categories-api.service';
+import { IncomeApiService } from '../../services/api/income/income-api.service';
+import { Payment } from '../../models/payment.model';
 
 @Component({
   selector: 'app-income',
-  imports: [ReactiveFormsModule, DatePipe, PaymentsList],
+  imports: [ReactiveFormsModule, PaymentsList],
   templateUrl: './income.html',
   styleUrl: './income.css',
 })
@@ -20,7 +19,7 @@ export class Income {
   constructor(
     private categoryApiService: CategoriesApiService,
     private fb: FormBuilder,
-    private http: HttpClient
+    private incomeApiService: IncomeApiService
   ) {
     this.form = this.fb.group({
       label: ['', [Validators.required, Validators.minLength(1)]],
@@ -37,30 +36,21 @@ export class Income {
   }
 
   getIncomes() {
-    this.http.get(API.INCOMES_BASE_URL, { responseType: 'json', withCredentials: true }).subscribe(
+    this.incomeApiService.getIncomes().subscribe(
       (res) => {
         this.incomes.set(res as any);
         console.log(this.incomes());
       }
     );
   }
-
-  addIncome() {
-    const label = this.form.get('label')?.value as string;
-    const category_id = this.form.get('category_id')?.value as string;
-    const amount = this.form.get('amount')?.value as number;
-    const payment_date = this.form.get('payment_date')?.value as number;
-    const details = {
-      label,
-      category_id,
-      amount,
-      payment_date
+  
+  createIncome(form: FormGroup): void {
+    const income: Payment = {
+      label: form.get('label')?.value as string,
+      category_id: form.get('category_id')?.value as string,
+      amount: form.get('amount')?.value as number,
+      payment_date: form.get('payment_date')?.value as number
     }
-
-    this.http.post(API.INCOMES_BASE_URL, details, { responseType: 'text', withCredentials: true }).subscribe(
-      (res) => {
-        console.log(res);
-      }
-    );
+    this.incomeApiService.createIncome(income).subscribe(() => this.getIncomes());
   }
 }

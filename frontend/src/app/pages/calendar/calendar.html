@@ -1,23 +1,23 @@
 <div>
-  <div>
-    <p>Income (income earned last month): {{ income() | currency: 'GBP' }}</p>
-    <p>Expenses (total of transactions): {{ expenses() | currency: 'GBP' }}</p>
-    <p>Budget (user-set budget): {{ 3 | currency: 'GBP' }}</p>
-    <p>Balance (income - spent): {{ income() - expenses() | currency: 'GBP' }}</p>
-    <p>Cumulative total (balance left over added together since first payment): {{ 4 | currency: 'GBP' }}</p>
+  <div class="flex justify-center gap-6 px-4">
+    <app-money-card class="flex-1" label="Balance" [value]="income() - expenses()" />
+    <app-money-card class="flex-1" label="Spent" [value]="-expenses()" />
+    <app-money-card class="flex-1" label="Income earned" [value]="pendingIncome()" />
+    <app-money-card class="flex-1" label="Budget" [value]="0" />
+    <app-money-card class="flex-1" label="Net worth" [value]="netWorth()" />
   </div>
 </div>
 
-<div class="mx-4 flex bg-mist-900 px-6 py-8 rounded-2xl gap-4">
+<div class="m-4 flex bg-mist-900 px-6 py-8 rounded-2xl gap-4">
   <div class="flex-1 bg-orange-500 rounded-2xl p-4">
     @if (selectedDay) {
-      <app-receipt-modal [date]=month.date [transactions]="getDayTransactions(selectedDay)" [incomes]="getDayIncomes(selectedDay)" />
+      <app-receipt-modal [date]=calendarService.getDate() [transactions]="getDayTransactions(selectedDay)" [incomes]="getDayIncomes(selectedDay)" (updateIncomes)="getPendingIncomes()", (updateTransactions)="getMonthTransactions()" />
     }
   </div>
   <div class="flex-1 bg-gray-100 p-4 rounded-2xl">
     <div class="flex justify-center gap-8">
       <div (click)="incrementMonth(-1)" class="text-2xl font-bold cursor-pointer"><</div>
-      <p class="text-2xl font-bold">{{ month.text + " " + month.date.getFullYear() }}</p>
+      <p class="text-2xl font-bold">{{ month.text + " " + calendarService.getDate().getFullYear() }}</p>
       <div (click)="incrementMonth(+1)" class="text-2xl font-bold cursor-pointer">></div>
     </div>
     <div class="w-full mt-4">
@@ -46,6 +46,17 @@
           </tr>
         }
       </table>
+    </div>
+  </div>
+</div>
+
+<div class="p-4">
+  <div class="flex w-full">
+    <div class="w-full">
+      <app-payments-list [payments]="transactions()" showDate (onCreatePayment)="createIncome($event)" />
+    </div>
+    <div class="w-full">
+      <app-payments-list [payments]="pendingIncomes()" showDate (onCreatePayment)="createIncome($event)" />
     </div>
   </div>
 </div>

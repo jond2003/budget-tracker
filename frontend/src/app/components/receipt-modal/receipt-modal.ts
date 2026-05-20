@@ -1,8 +1,9 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { PaymentsList } from '../payments-list/payments-list';
 import { IncomeApiService } from '../../services/api/income/income-api.service';
 import { TransactionsApiService } from '../../services/api/transactions/transactions-api.service';
 import { Payment } from '../../models/payment.model';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-receipt-modal',
@@ -15,8 +16,8 @@ export class ReceiptModal {
   transactions = input.required<Payment[]>();
   incomes = input.required<Payment[]>();
 
-  disableIncomeRow = -1
-  disableTransactionRow = -1
+  updateIncomes = output<void>();
+  updateTransactions = output<void>();
 
   constructor(
     private incomeApiService: IncomeApiService,
@@ -24,16 +25,35 @@ export class ReceiptModal {
   ) { }
 
   deleteIncome(index: number): void {
-    this.disableIncomeRow = index;
     this.incomeApiService.deleteIncome(this.incomes()[index]).subscribe(() => {
-      this.disableIncomeRow = -1;
+      this.updateIncomes.emit();
     });
   }
 
   deleteTransaction(index: number): void {
-    this.disableTransactionRow = index;
     this.transactionApiService.deleteTransaction(this.transactions()[index]).subscribe(() => {
-      this.disableTransactionRow = -1;
+      this.updateTransactions.emit();
     });
+  }
+
+  createTransaction(form: FormGroup): void {
+    const transaction: Payment = {
+      label: form.get('label')?.value as string,
+      category_id: form.get('category_id')?.value as string,
+      amount: form.get('amount')?.value as number,
+      payment_date: form.get('payment_date')?.value as number
+    }
+    console.log(transaction);
+    this.transactionApiService.createTransaction(transaction).subscribe(() => this.updateTransactions.emit());
+  }
+
+  createIncome(form: FormGroup): void {
+    const income: Payment = {
+      label: form.get('label')?.value as string,
+      category_id: form.get('category_id')?.value as string,
+      amount: form.get('amount')?.value as number,
+      payment_date: form.get('payment_date')?.value as number
+    }
+    this.incomeApiService.createIncome(income).subscribe(() => this.updateIncomes.emit());
   }
 }

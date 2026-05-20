@@ -1,60 +1,6 @@
 <div>
-  <form [formGroup]="form" (ngSubmit)="addTransaction()">
-
-    <div>
-      <label for="label">Label</label>
-      <input
-        id="label"
-        type="text"
-        formControlName="label"
-        placeholder="Enter a label"
-      />
-    </div>
-
-    <div>
-      <label for="category">Category</label>
-      <select
-        id="category"
-        type="text"
-        formControlName="category"
-        placeholder="Enter a category"
-
-      >
-        @for (cat of categories(); track $index) {
-          <option [value]="cat._id" >{{ cat.name }}</option>
-        }
-      </select>
-    </div>
-
-    <div>
-      <label for="amount">Amount</label>
-      <input
-        id="amount"
-        type="number"
-        formControlName="amount"
-        min="0"
-        placeholder="0.00"
-      />
-    </div>
-
-    <div>
-      <label for="payment_date">Payment Date</label>
-      <input
-        id="payment_date"
-        type="date"
-        formControlName="payment_date"
-      />
-    </div>
-
-    <button type="submit" [disabled]="form.invalid">Submit</button>
-
-  </form>
-</div>
-
-<div>
-  <br>
   <div>Transactions</div>
-  <app-payments-list [payments]="transactions()" showDate />
+  <app-payments-list [payments]="transactions()" showDate (onCreatePayment)="createTransaction($event)" />
 </div>
 
 <div>

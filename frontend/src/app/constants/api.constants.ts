@@ -28,9 +28,11 @@ export  namespace API {
   export const TRANSACTIONS_CATEGORIES = CATEGORIES_BASE_URL + 'transaction/';
 
   export const BUDGETS_BASE_URL = BASE_URL + 'budget/';
+  export const ALL_BUDGETS = BUDGETS_BASE_URL + 'all/';
   export const MONTH_BUDGET = BUDGETS_BASE_URL + 'month/';
   export const CATEGORY_BUDGETS = BUDGETS_BASE_URL + 'category/';
   export const MONTH_CATEGORY_BUDGET = (date: string, category_id: string) => {
     return MONTH_BUDGET + date + '/category/' + category_id;
   };
+  export const NET_WORTH = BUDGETS_BASE_URL + 'networth/';
 }

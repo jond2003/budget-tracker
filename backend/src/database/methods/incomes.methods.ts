@@ -47,6 +47,23 @@ export namespace IncomesCollection {
     return await collection.find({ user_id, category_id }).toArray();
   }
 
+  // Gets the total value of the user's incomes
+  export const getTotalIncomeAmount = async(user_id: ObjectId): Promise<number> => {
+    return (await collection.aggregate([
+      {
+        $match: {
+          user_id
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          total: { $sum: '$amount' }
+        }
+      }
+    ]).toArray())[0]?.total || 0;
+  }
+
   // Delete a income given the ID
   export const deleteIncome = async (_id: ObjectId): Promise<Income | null> => {
     return await collection.findOneAndDelete({ _id });
