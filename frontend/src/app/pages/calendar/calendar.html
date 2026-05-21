@@ -51,12 +51,12 @@
 </div>
 
 <div class="p-4">
-  <div class="flex w-full">
-    <div class="w-full">
-      <app-payments-list [payments]="transactions()" showDate (onCreatePayment)="createIncome($event)" />
+  <div class="flex w-full border">
+    <div class="flex-1">
+      <app-payments-list [payments]="transactions()" showDate (onCreatePayment)="createIncome($event)" type="transaction" />
     </div>
-    <div class="w-full">
-      <app-payments-list [payments]="pendingIncomes()" showDate (onCreatePayment)="createIncome($event)" />
+    <div class="flex-1">
+      <app-payments-list [payments]="pendingIncomes()" showDate (onCreatePayment)="createIncome($event)" type="income" />
     </div>
   </div>
 </div>

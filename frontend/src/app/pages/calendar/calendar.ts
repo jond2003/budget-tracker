@@ -1,10 +1,9 @@
 import { Component, computed, signal } from '@angular/core';
 import { CalendarService } from '../../services/calendar/calendar';
 import { ReceiptModal } from '../../components/receipt-modal/receipt-modal';
-import { CurrencyPipe, DecimalPipe, NgClass } from '@angular/common';
+import { DecimalPipe, NgClass } from '@angular/common';
 import { IncomeApiService } from '../../services/api/income/income-api.service';
 import { TransactionsApiService } from '../../services/api/transactions/transactions-api.service';
-import { CategoriesApiService } from '../../services/api/categories/categories-api.service';
 import { PaymentsList } from "../../components/payments-list/payments-list";
 import { FormGroup } from '@angular/forms';
 import { Payment } from '../../models/payment.model';
@@ -13,7 +12,7 @@ import { BudgetApiService } from '../../services/api/budgets/budget-api.service'
 
 @Component({
   selector: 'app-calendar',
-  imports: [ReceiptModal, NgClass, CurrencyPipe, DecimalPipe, PaymentsList, MoneyCard],
+  imports: [ReceiptModal, NgClass, DecimalPipe, PaymentsList, MoneyCard],
   templateUrl: './calendar.html',
   styleUrl: './calendar.css',
 })
@@ -40,12 +39,10 @@ export class Calendar {
   constructor(
     private incomeApiService: IncomeApiService,
     private transactionApiService: TransactionsApiService,
-    private categoryApiService: CategoriesApiService,
     public calendarService: CalendarService,
     private budgetApiService: BudgetApiService
   ) {
     this.updateMonth();
-    this.getNetWorth();
   }
 
   updateMonth(): void {
@@ -75,7 +72,7 @@ export class Calendar {
   viewDay(d: number): void {
     this.showReceipt = true;
     this.selectedDay = d;
-    // this.month.date.setDate(d);
+    this.month.date.setDate(d);
     this.calendarService.setDayOfMonth(d);
   }
 
@@ -132,6 +129,7 @@ export class Calendar {
     this.incomeApiService.getIncomesByMonth(this.month.date).subscribe(
       (res) => {
         this.pendingIncomes.set(res as any);
+        this.getNetWorth();
       }
     );
   }
@@ -140,6 +138,7 @@ export class Calendar {
     this.transactionApiService.getIncomesByMonth(this.month.date).subscribe(
       (res) => {
         this.transactions.set(res as any);
+        this.getNetWorth();
       }
     );
   }

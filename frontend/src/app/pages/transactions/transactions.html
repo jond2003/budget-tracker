@@ -1,6 +1,6 @@
 <div>
   <div>Transactions</div>
-  <app-payments-list [payments]="transactions()" showDate (onCreatePayment)="createTransaction($event)" />
+  <app-payments-list [payments]="transactions()" showDate (onCreatePayment)="createTransaction($event)" type="transaction" />
 </div>
 
 <div>
@@ -27,7 +27,7 @@
 <div>
   <br>
   <div>Filtered Transactions</div>
-  <app-payments-list [payments]="filteredTransactions()" showDate />
+  <app-payments-list [payments]="filteredTransactions()" showDate type="transaction" />
 </div>
 
 <div>

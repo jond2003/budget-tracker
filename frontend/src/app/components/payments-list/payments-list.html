@@ -11,17 +11,18 @@
       @if (showCreateForm()) {
         <tr class="border text-left">
           <td class="p-2">
-            <input class="outline-0" id="label" type="text" formControlName="label" placeholder="Enter a label" />
+            <input class="outline-0 border-b" id="label" type="text" formControlName="label" placeholder="Enter a label" />
           </td>
           <td class="p-2">
-            <select id="category_id" type="text" formControlName="category_id" placeholder="Enter a category">
+            <select class="outline-0 border-b" id="category_id" type="text" formControlName="category_id">
+              <option [value]="''" disabled selected>Select a category</option>
               @for (cat of categories(); track $index) {
-                <option [value]="cat._id" >{{ cat.name }}</option>
+                <option [value]="cat._id" [style.color]="cat.colour" >{{ cat.name }}</option>
               }
             </select>
           </td>
           <td class="p-2">
-            £<input class="no-spinner outline-0" id="amount" type="number" formControlName="amount" min="0" placeholder="0.00" />
+            £<input class="no-spinner outline-0 border-b w-12" id="amount" type="number" formControlName="amount" min="0" placeholder="0.00" />
           </td>
           @if (showDate()) {
             <td class="p-2">
@@ -50,6 +51,6 @@
     </table>
   </form>
   <div>
-    <div class="cursor-pointer font-bold" (click)="showCreateForm.set(true)">+</div>
+    <div class="cursor-pointer font-bold text-2xl p-1" (click)="showCreateForm.set(!showCreateForm())">@if (showCreateForm()) { - } @else { + }</div>
   </div>
 </div>
