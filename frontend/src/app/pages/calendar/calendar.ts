@@ -1,16 +1,18 @@
 import { Component, computed, signal } from '@angular/core';
 import { CalendarService } from '../../services/calendar/calendar';
 import { ReceiptModal } from '../../components/receipt-modal/receipt-modal';
-import { HttpClient } from '@angular/common/http';
-import { API } from '../../constants/api.constants';
-import { NgClass } from '@angular/common';
+import { DecimalPipe, NgClass } from '@angular/common';
 import { IncomeApiService } from '../../services/api/income/income-api.service';
 import { TransactionsApiService } from '../../services/api/transactions/transactions-api.service';
-import { CategoriesApiService } from '../../services/api/categories/categories-api.service';
+import { PaymentsList } from "../../components/payments-list/payments-list";
+import { FormGroup } from '@angular/forms';
+import { Payment } from '../../models/payment.model';
+import { MoneyCard } from "../../components/money-card/money-card";
+import { BudgetApiService } from '../../services/api/budgets/budget-api.service';
 
 @Component({
   selector: 'app-calendar',
-  imports: [ReceiptModal, NgClass],
+  imports: [ReceiptModal, NgClass, DecimalPipe, PaymentsList, MoneyCard],
   templateUrl: './calendar.html',
   styleUrl: './calendar.css',
 })
@@ -22,12 +24,14 @@ export class Calendar {
     text: 'April'
   };
   
-  incomes = signal([] as any);
-  transactions = signal([] as any);
-  pendingIncomes = signal([] as any);
+  incomes = signal<Payment[]>([]);
+  transactions = signal<Payment[]>([] as any);
+  pendingIncomes = signal<Payment[]>([] as any);
+  netWorth = signal<number>(0);
 
   income = computed(() => this.incomes().reduce((acc: number, c: any) => acc + c.amount, 0));
   expenses = computed(() => this.transactions().reduce((acc: number, c: any) => acc + c.amount, 0));
+  pendingIncome = computed(() => this.pendingIncomes().reduce((acc: number, c: any) => acc + c.amount, 0));
 
   showReceipt = false;
   selectedDay = 0;
@@ -35,8 +39,8 @@ export class Calendar {
   constructor(
     private incomeApiService: IncomeApiService,
     private transactionApiService: TransactionsApiService,
-    private categoryApiService: CategoriesApiService,
-    private calendarService: CalendarService,
+    public calendarService: CalendarService,
+    private budgetApiService: BudgetApiService
   ) {
     this.updateMonth();
   }
@@ -69,6 +73,7 @@ export class Calendar {
     this.showReceipt = true;
     this.selectedDay = d;
     this.month.date.setDate(d);
+    this.calendarService.setDayOfMonth(d);
   }
 
   getDay(d: string): number {
@@ -124,6 +129,7 @@ export class Calendar {
     this.incomeApiService.getIncomesByMonth(this.month.date).subscribe(
       (res) => {
         this.pendingIncomes.set(res as any);
+        this.getNetWorth();
       }
     );
   }
@@ -132,7 +138,34 @@ export class Calendar {
     this.transactionApiService.getIncomesByMonth(this.month.date).subscribe(
       (res) => {
         this.transactions.set(res as any);
+        this.getNetWorth();
       }
     );
+  }
+
+  getNetWorth() {
+    this.budgetApiService.getNetWorth().subscribe((res) => {
+      this.netWorth.set(res);
+    });
+  }
+
+  createTransaction(form: FormGroup): void {
+    const transaction: Payment = {
+      label: form.get('label')?.value as string,
+      category_id: form.get('category_id')?.value as string,
+      amount: form.get('amount')?.value as number,
+      payment_date: form.get('payment_date')?.value as number
+    }
+    this.transactionApiService.createTransaction(transaction).subscribe(() => this.getMonthTransactions());
+  }
+
+  createIncome(form: FormGroup): void {
+    const income: Payment = {
+      label: form.get('label')?.value as string,
+      category_id: form.get('category_id')?.value as string,
+      amount: form.get('amount')?.value as number,
+      payment_date: form.get('payment_date')?.value as number
+    }
+    this.incomeApiService.createIncome(income).subscribe(() => this.getPendingIncomes());
   }
 }

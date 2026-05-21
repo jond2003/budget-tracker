@@ -1,12 +1,15 @@
 <div>
-  <p>Day {{ date().getDate() }}</p>
+  <div class="flex gap-2 items-end">
+    <h3 class="text-xl font-bold">Day {{ date().getDate() }}</h3>
+    <p class="">Earned: {{ incomesAmount() | currency: 'GBP' }}</p>
+    <p class="">Spent: {{ transactionsAmount() | currency: 'GBP' }}</p>
+  </div>
 
   <div>
     
-  <div>Transactions</div>
-  <app-payments-list [payments]="transactions()" />
+  <div class="mt-4 font-bold">Transactions</div>
+  <app-payments-list [payments]="transactions()" (onDeleteRow)="deleteTransaction($event)" (onCreatePayment)="createTransaction($event)" type="transaction" />
 
-  <br>
-  <div>Pending Income</div>
-  <app-payments-list [payments]="incomes()" />
+  <div class="mt-4 font-bold">Pending Income</div>
+  <app-payments-list [payments]="incomes()" (onDeleteRow)="deleteIncome($event)" (onCreatePayment)="createIncome($event)" type="income" />
 </div>

@@ -65,4 +65,13 @@ export class TransactionsApiService {
     this.monthTrxns[key].update = false;
     return this.monthTrxns[key].data
   }
+
+  deleteTransaction(trx: Payment): Observable<any> {
+    const date = new Date(trx.payment_date);
+    const key = date.getMonth() + '/' + date.getFullYear();
+    this.trns.update = true;
+    if (this.monthTrxns[key]) this.monthTrxns[key].update = true;
+    if (this.catsTrns[trx.category_id]) this.catsTrns[trx.category_id].update = true;
+    return this.http.delete(API.TRANSACTIONS_BASE_URL + trx._id, { responseType: 'json', withCredentials: true });
+  }
 }

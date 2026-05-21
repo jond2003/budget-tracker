@@ -1,21 +1,61 @@
-<table class="w-full">
-  <tr class="border text-left">
-    <th class="p-2">Name</th>
-    <th class="p-2">Category</th>
-    <th class="p-2">Amount</th>
-    @if (showDate()) { <th class="p-2">Date</th> }
-  </tr>
-  @for (t of payments(); track $index) {
-    <tr class="border">
-      <td class="p-2">{{ t.label }}</td>
-      <td class="p-2">{{ categories().find(v => v._id == t.category_id)?.name }}</td>
-      <td class="p-2">£{{ t.amount }}</td>
-      @if (showDate()) { <td class="p-2">{{ t.payment_date | date }}</td> }
-    </tr>
-  }
-  <tr class="border font-bold">
-    <td class="p-2">Total</td>
-    <td class="p-2"></td>
-    <td class="p-2">£{{ totalAmount() }}</td>
-  </tr>
-</table>
+<div class="flex w-full">
+  <form class="w-full" [formGroup]="form" (ngSubmit)="createPayment()">
+    <table class="w-full">
+      <tr class="border text-left">
+        <th class="p-2">Name</th>
+        <th class="p-2">Category</th>
+        <th class="p-2">Amount</th>
+        @if (showDate()) { <th class="p-2">Date</th> }
+        <th class="p-2 text-right">Delete?</th>
+      </tr>
+      @if (showCreateForm()) {
+        <tr class="border text-left">
+          <td class="p-2">
+            <input #firstInput class="outline-0 border-b" id="label" type="text" formControlName="label" placeholder="Enter a label" />
+          </td>
+          <td class="p-2">
+            <select class="outline-0 border-b" id="category_id" type="text" formControlName="category_id">
+              <option [value]="''" disabled selected>Select a category</option>
+              @for (cat of categories(); track $index) {
+                <option [value]="cat._id" [style.color]="cat.colour" [style.background-color]="getBackgroundColor(cat.colour)">{{ cat.name }}</option>
+              }
+            </select>
+          </td>
+          <td class="p-2">
+            £<input class="no-spinner outline-0 border-b w-12" id="amount" type="number" formControlName="amount" min="0" placeholder="0.00" />
+          </td>
+          @if (showDate()) {
+            <td class="p-2">
+              <input id="payment_date" type="date" formControlName="payment_date" />
+            </td>
+          }
+          <td class="p-2">
+            <button type="submit" [disabled]="form.invalid" class="cursor-pointer">Create</button>
+          </td>
+        </tr>
+      }
+      @for (t of payments(); track $index) {
+        <tr class="border border-black" [ngClass]="disableRow() == $index ? 'pointer-events-none' : 'pointer-events-auto'" [style.background-color]="categories().find(v => v._id == t.category_id)?.colour" [style.color]="getTextColor(categories().find(v => v._id == t.category_id)?.colour!)">
+          <td class="p-2">{{ t.label }}</td>
+          <td class="p-2">{{ categories().find(v => v._id == t.category_id)?.name }}</td>
+          <td class="p-2">{{ t.amount | currency: 'GBP' }}</td>
+          @if (showDate()) { <td class="p-2">{{ t.payment_date | date }}</td> }
+          @if (rowToDelete() == $index) {
+            <td class="p-2 text-right">
+              <span class="cursor-pointer" (click)="deleteRow()">Y</span> / <span class="cursor-pointer" (click)="cancelDeleteRow()">N</span>
+            </td>
+          }
+          @else { <td class="p-2 text-right cursor-pointer" [ngClass]="rowToDelete() != -1 && rowToDelete() != $index ? 'pointer-events-none' : 'pointer-events-auto'" (click)="confirmDeleteRow($index)">O</td> }
+        </tr>
+      }
+      <tr class="border font-bold">
+        <td class="p-2">Total</td>
+        <td class="p-2"></td>
+        <td class="p-2">{{ totalAmount() | currency: 'GBP' }}</td>
+      </tr>
+    </table>
+  </form>
+  <div>
+    <div class="cursor-pointer font-bold text-2xl p-1" (click)="toggleForm()">@if (showCreateForm()) { - } @else { + }</div>
+  </div>
+</div>

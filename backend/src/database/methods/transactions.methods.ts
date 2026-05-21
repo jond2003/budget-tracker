@@ -46,6 +46,21 @@ export namespace TransactionsCollection {
       category_id
     }).toArray();
   }
+  
+  // Gets the total value of a user's transactions
+  export const getTotalTransactionAmount = async(user_id: ObjectId): Promise<number> => {
+    return (await collection.aggregate([
+      {
+        $match: { user_id }
+      },
+      {
+        $group: {
+          _id: null,
+          total: { $sum: '$amount' }
+        }
+      }
+    ]).toArray())[0]?.total || 0;
+  }
 
   // Delete a transaction given the ID
   export const deleteTransaction = async (_id: ObjectId): Promise<Transaction | null> => {

@@ -6,6 +6,11 @@ import { db } from "../connection";
 const collection = db.collection<Budget>(Collections.BUDGETS);
 
 export namespace BudgetsCollection {
+  // Get all budgets by user id
+  export const getAllBudgetsByUserId = async (user_id: ObjectId): Promise<Budget[]> => {
+    return await collection.find({ user_id }).toArray();
+  }
+
   // Create a budget document
   export const createBudget = async (newBudget: Budget): Promise<ObjectId> => {
     return (await collection.insertOne(newBudget as any)).insertedId;
@@ -74,17 +79,6 @@ export namespace BudgetsCollection {
         }
       ]
     });
-  }
-
-  // Get all general budgets by user id
-  export const getGeneralBudgetsById = async (user_id: ObjectId): Promise<Budget[]> => {
-    return await collection.find({
-      user_id,
-      $or: [
-        { category_id: { $exists: false } },
-        { category_id: null }
-      ]
-    }).toArray();
   }
 
   // Get all budgets created by the same user using their user ID

@@ -2,11 +2,24 @@ import { NextFunction, Request, Response } from "express";
 import { ObjectId } from "mongodb";
 import { BudgetsCollection } from "../database/methods/budgets.methods";
 import { Budget } from "../models/budget";
+import { IncomesCollection } from "../database/methods/incomes.methods";
+import { TransactionsCollection } from "../database/methods/transactions.methods";
 
 export const getGeneralBudgets = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = new ObjectId(req.session.userId);
-    const budgets = await BudgetsCollection.getGeneralBudgetsById(userId) || [];
+    const budgets = await BudgetsCollection.getGeneralBudgetsByUserId(userId) || [];
+
+    res.send(budgets).status(200);
+  } catch (err) {
+    next(err); 
+  }
+}
+
+export const getAllBudgets = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = new ObjectId(req.session.userId);
+    const budgets = await BudgetsCollection.getAllBudgetsByUserId(userId) || [];
 
     res.send(budgets).status(200);
   } catch (err) {
@@ -69,6 +82,20 @@ export const createBudget = async (req: Request, res: Response, next: NextFuncti
     if (result) res.send(result).status(200);
   } catch (err) {
     next(err);
+  }
+}
+
+export const getNetWorth = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = new ObjectId(req.session.userId);
+
+    const incomesTotal = await IncomesCollection.getTotalIncomeAmount(userId);
+    const transactionsTotal = await TransactionsCollection.getTotalTransactionAmount(userId);
+    const netWorth = incomesTotal - transactionsTotal;
+
+    res.send(netWorth).status(200);
+  } catch (err) {
+    next(err); 
   }
 }
 

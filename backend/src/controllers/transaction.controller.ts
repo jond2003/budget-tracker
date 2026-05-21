@@ -85,9 +85,9 @@ export const getTransactionById = async (req: Request, res: Response, next: Next
 
 export const deleteTransaction = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const deletedTransaction = await TransactionsCollection.deleteTransaction(new ObjectId(req.params.id![0]));
+    const deletedTransaction = await TransactionsCollection.deleteTransaction(new ObjectId(req.params.id! as string));
 
-    if (!deletedTransaction) res.send("Not found").status(404);
+    if (!deletedTransaction) res.json("Not found").status(404);
     else res.send(deletedTransaction).status(200);
   } catch (err) {
     next(err);

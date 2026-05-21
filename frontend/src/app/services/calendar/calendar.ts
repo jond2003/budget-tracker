@@ -1,17 +1,28 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CalendarService {
   private date = new Date();
+  
+  private dateSubject = new BehaviorSubject<Date>(this.date);
+  date$ = this.dateSubject.asObservable();
 
   public setMonth(i: number): void {
     this.date.setMonth(i);
+    this.dateSubject.next(this.date);
   }
 
   public setDate(newDate: Date): void {
     this.date = new Date(newDate);
+    this.dateSubject.next(this.date);
+  }
+
+  public setDayOfMonth(day: number): void {
+    this.date.setDate(day);
+    this.dateSubject.next(this.date);
   }
 
   public getMonth(): number {
@@ -24,6 +35,7 @@ export class CalendarService {
 
   public setYear(m: number, y: number): void {
     this.date.setFullYear(y, m);
+    this.dateSubject.next(this.date);
   }
 
   public getYear(): number {
