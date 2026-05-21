@@ -7,6 +7,7 @@ import { PaymentsList } from "../../components/payments-list/payments-list";
 import { TransactionsApiService } from '../../services/api/transactions/transactions-api.service';
 import { Payment } from '../../models/payment.model';
 import { CategoriesApiService } from '../../services/api/categories/categories-api.service';
+import { BudgetApiService } from '../../services/api/budgets/budget-api.service';
 
 @Component({
   selector: 'app-transactions',
@@ -25,6 +26,7 @@ export class Transactions {
   constructor(
     private transactionApiService: TransactionsApiService,
     private categoryApiService: CategoriesApiService,
+    private budgetApiService: BudgetApiService,
     private fb: FormBuilder,
     private http: HttpClient
   ) {
@@ -52,7 +54,6 @@ export class Transactions {
       amount: form.get('amount')?.value as number,
       payment_date: form.get('payment_date')?.value as number
     }
-    console.log(transaction);
     this.transactionApiService.createTransaction(transaction).subscribe(() => this.getTransactions());
   }
 
@@ -61,10 +62,9 @@ export class Transactions {
   }
   
   getBudgets(category_id: string) {
-    this.http.get(API.CATEGORY_BUDGETS + category_id, { responseType: 'json', withCredentials: true }).subscribe(
+    this.budgetApiService.getBudgetsByCategory(category_id).subscribe(
       (res) => {
         this.budgets.set(res as any);
-        console.log(res);
       }
     );
   }

@@ -56,7 +56,7 @@ export class Calendar {
     for (let i = 0; i < arr.length; i += 7) {
       this.days.push(arr.slice(i, i + 7));
     }
-    console.log(this.getDayWeekOffset(), this.days);
+    // console.log(this.getDayWeekOffset(), this.days);
     this.getMonthIncomes();
     this.getMonthTransactions();
     this.getPendingIncomes();

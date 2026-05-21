@@ -22,13 +22,6 @@ export class PaymentsList implements OnInit {
   disableRow = signal<number>(-1);
   rowToDelete = signal<number>(-1);
   showCreateForm = signal(false);
-  // onToggleForm = computed(() => {
-  //   this.showCreateForm() && this.clearForm();
-  //   if (this.showCreateForm()) {
-  //     console.log("Works");
-  //     afterNextRender(() => this.firstInput?.nativeElement.focus());
-  //   }
-  // });
 
   type = input.required<'transaction' | 'income' | 'both'>();
 
@@ -85,7 +78,6 @@ export class PaymentsList implements OnInit {
   
   getCategories() {
     const setCategories = (cats: Category[]) => this.categories.set(cats as any);
-    console.log('type', this.type());
     
     switch (this.type()) {
       case 'transaction':
@@ -123,6 +115,7 @@ export class PaymentsList implements OnInit {
 
   getTextColor(hex: string, negative=false): string {
     // remove #
+    if (!hex) return '#ffffff'
     hex = hex.replace('#', '');
 
     // support shorthand (#fff)

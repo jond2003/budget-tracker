@@ -47,7 +47,6 @@ export class ReceiptModal {
       amount: form.get('amount')?.value as number,
       payment_date: form.get('payment_date')?.value as number
     }
-    console.log(transaction);
     this.transactionApiService.createTransaction(transaction).subscribe(() => this.updateTransactions.emit());
   }
 

@@ -39,7 +39,6 @@ export class Income {
     this.incomeApiService.getIncomes().subscribe(
       (res) => {
         this.incomes.set(res as any);
-        console.log(this.incomes());
       }
     );
   }

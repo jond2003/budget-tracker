@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { LoginService } from '../../../services/login/login-service';
+import { Router } from '@angular/router';
+import { AppRoutes } from '../../../constants/routes';
 
 function passwordsMatch(group: AbstractControl): ValidationErrors | null {
   const pw = group.get('password')?.value;
@@ -17,7 +19,7 @@ function passwordsMatch(group: AbstractControl): ValidationErrors | null {
 export class Register {
   form: FormGroup;
 
-  constructor(private fb: FormBuilder, private loginService: LoginService) {
+  constructor(private fb: FormBuilder, private loginService: LoginService, private router: Router) {
     this.form = this.fb.group(
       {
         firstname: ['', Validators.required],
@@ -37,6 +39,14 @@ export class Register {
   get confirmPassword() { return this.form.get('confirmPassword')!; }
 
   onSubmit() {
-    this.loginService.register(this.form).subscribe(res => console.log(res));
+    this.loginService.register(this.form).subscribe(res => {
+      if (res.ok) {
+        this.loginService.login(this.form).subscribe((res) => {
+          if (res.ok) this.router.navigate(['/'+ AppRoutes.CALENDAR]);
+          else console.log(res);
+        });
+      }
+      else console.log(res);
+    });
   }
 }

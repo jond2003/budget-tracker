@@ -28,7 +28,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
 
     req.session.userId = user._id!.toString();
     users.push({ ...user });
-    res.send({}).status(200);
+    res.send({ user_id: user._id, ok: true }).status(200);
   } catch (error) {
     next(error);
   }
@@ -60,7 +60,7 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
     }
     const userId = await UsersCollection.createUser(newUser);
 
-    res.send({ message: 'Account created successfully' }).status(201);
+    res.send({ user_id: userId, ok: true }).status(201);
   } catch (error) {
     next(error);
   }

@@ -12,7 +12,7 @@ export class LoginService {
 
   constructor(private http: HttpClient) { }
 
-  login(formData: FormGroup): Observable<Object> {
+  login(formData: FormGroup): Observable<any> {
     const email = formData.get('email')?.value as string;
     const password = formData.get('password')?.value as string;
     const details: UserModel.LoginUser = {
@@ -24,7 +24,7 @@ export class LoginService {
     return res;
   }
 
-  register(formData: FormGroup): Observable<Object> {
+  register(formData: FormGroup): Observable<any> {
     const email = formData.get('email')?.value as string;
     const firstname = formData.get('firstname')?.value as string;
     const lastname = formData.get('lastname')?.value as string;
