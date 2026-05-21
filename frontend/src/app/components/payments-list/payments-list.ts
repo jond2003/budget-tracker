@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, computed, input, OnInit, output, signal } from '@angular/core';
+import { afterNextRender, booleanAttribute, Component, computed, ElementRef, input, OnInit, output, signal, ViewChild } from '@angular/core';
 import { Payment } from '../../models/payment.model';
 import { CurrencyPipe, DatePipe, NgClass } from '@angular/common';
 import { CategoriesApiService } from '../../services/api/categories/categories-api.service';
@@ -20,8 +20,15 @@ export class PaymentsList implements OnInit {
     transform: booleanAttribute
   });
   disableRow = signal<number>(-1);
+  rowToDelete = signal<number>(-1);
   showCreateForm = signal(false);
-  onToggleForm = computed(() => this.showCreateForm() && this.clearForm());
+  // onToggleForm = computed(() => {
+  //   this.showCreateForm() && this.clearForm();
+  //   if (this.showCreateForm()) {
+  //     console.log("Works");
+  //     afterNextRender(() => this.firstInput?.nativeElement.focus());
+  //   }
+  // });
 
   type = input.required<'transaction' | 'income' | 'both'>();
 
@@ -38,6 +45,9 @@ export class PaymentsList implements OnInit {
   categories = signal<Category[]>([]);
 
   form: FormGroup;
+  
+  @ViewChild('firstInput')
+  firstInput?: ElementRef<HTMLInputElement>;
 
   constructor(private categoryApiService: CategoriesApiService, private calendarService: CalendarService, private fb: FormBuilder) {
     this.form = this.fb.group({
@@ -64,6 +74,14 @@ export class PaymentsList implements OnInit {
       payment_date: this.calendarService.getDate()
     });
   }
+
+  toggleForm() {
+    this.showCreateForm.set(!this.showCreateForm());
+    this.clearForm();
+    if (this.showCreateForm()) {
+      setTimeout(() => this.firstInput?.nativeElement.focus());
+    }
+  }
   
   getCategories() {
     const setCategories = (cats: Category[]) => this.categories.set(cats as any);
@@ -84,14 +102,51 @@ export class PaymentsList implements OnInit {
         return;
     }
   }
+
+  confirmDeleteRow(index: number) {
+    this.rowToDelete.set(index);
+  }
   
-  deleteRow(index: number) {
-    console.log("Deleting row", index);
-    this.onDeleteRow.emit(index);
+  deleteRow() {
+    this.onDeleteRow.emit(this.rowToDelete());
+    this.rowToDelete.set(-1);
+  }
+
+  cancelDeleteRow() {
+    this.rowToDelete.set(-1);
   }
   
   createPayment(): void {
     this.onCreatePayment.emit(this.form);
     this.showCreateForm.set(false);
+  }
+
+  getTextColor(hex: string, negative=false): string {
+    // remove #
+    hex = hex.replace('#', '');
+
+    // support shorthand (#fff)
+    if (hex.length === 3) {
+      hex = hex
+        .split('')
+        .map(c => c + c)
+        .join('');
+    }
+
+    const r = parseInt(hex.substring(0, 2), 16);
+    const g = parseInt(hex.substring(2, 4), 16);
+    const b = parseInt(hex.substring(4, 6), 16);
+
+    // perceived brightness
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+
+    const checkColour = brightness > 64 ? '#000000' : '#ffffff';
+    const checkNegativeColour = brightness > 192 ? '#000000' : '#ffffff';
+
+    return negative ? checkNegativeColour : checkColour;
+  }
+
+  getBackgroundColor(hex: string) {
+    return this.getTextColor(hex, true);
   }
 }

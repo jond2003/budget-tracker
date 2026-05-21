@@ -1,13 +1,14 @@
-import { Component, input, output } from '@angular/core';
+import { Component, computed, input, output } from '@angular/core';
 import { PaymentsList } from '../payments-list/payments-list';
 import { IncomeApiService } from '../../services/api/income/income-api.service';
 import { TransactionsApiService } from '../../services/api/transactions/transactions-api.service';
 import { Payment } from '../../models/payment.model';
 import { FormGroup } from '@angular/forms';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-receipt-modal',
-  imports: [PaymentsList],
+  imports: [PaymentsList, CurrencyPipe],
   templateUrl: './receipt-modal.html',
   styleUrl: './receipt-modal.css',
 })
@@ -18,6 +19,9 @@ export class ReceiptModal {
 
   updateIncomes = output<void>();
   updateTransactions = output<void>();
+
+  incomesAmount = computed(() => this.incomes().reduce((acc: number, c: any) => acc + c.amount, 0));
+  transactionsAmount = computed(() => this.transactions().reduce((acc: number, c: any) => acc + c.amount, 0));
 
   constructor(
     private incomeApiService: IncomeApiService,
