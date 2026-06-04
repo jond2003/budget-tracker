@@ -26,6 +26,15 @@ export namespace CategoriesCollection {
     return await collection.find({ user_id, payment_type }).toArray();
   }
 
+  // Update a category given its unique ID
+  export const updateCategory = async (_id: ObjectId, fieldsToUpdate: Partial<Category>): Promise<Category | null> => {
+    return await collection.findOneAndUpdate(
+      { _id },
+      { $set: fieldsToUpdate },
+      { returnDocument: "after" }
+    );
+  }
+
   // Delete a category given the ID
   export const deleteCategory = async (_id: ObjectId): Promise<Category | null> => {
     return await collection.findOneAndDelete({ _id });

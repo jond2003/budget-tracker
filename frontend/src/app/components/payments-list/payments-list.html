@@ -17,7 +17,7 @@
             <select class="outline-0 border-b" id="category_id" type="text" formControlName="category_id">
               <option [value]="''" disabled selected>Select a category</option>
               @for (cat of categories(); track $index) {
-                <option [value]="cat._id" [style.color]="cat.colour" [style.background-color]="getBackgroundColor(cat.colour)">{{ cat.name }}</option>
+                <option [value]="cat._id" [style.color]="cat.colour" [style.background-color]="getBackgroundColor(cat.colour!)">{{ cat.name }}</option>
               }
             </select>
           </td>

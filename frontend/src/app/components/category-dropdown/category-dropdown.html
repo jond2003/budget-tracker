@@ -1,0 +1,24 @@
+<div class="relative w-60 flex">
+  @if (selectedCategory()) {
+    <div class="px-2 w-fit rounded-4xl border flex-1" [style.background-color]="selectedCategory()?.secondary_colour">
+      <p class="font-semibold" [style.color]="selectedCategory()?.primary_colour">{{ selectedCategory()?.name }}</p>
+    </div>
+  }
+  <div class="flex-1 p-2 cursor-text" (click)="focusInput()">
+    <input #textInput class="border-b outline-offset-0 outline-0 w-full" type="text" placeholder="Select a category" (blur)="showDropdown.set(false)" />
+  </div>
+
+  @if (showDropdown()) {
+    <div class="absolute -bottom-full left-0 w-full bg-white">
+      <div class="flex flex-col">
+        @for (cat of categories(); track $index) {
+          <div class="p-2" [ngClass]="$index % 2 == 0 ? 'bg-gray-100' : 'bg-white'" (click)="selectCategory($index)">
+            <div class="px-2 w-fit rounded-4xl border flex-1" [style.background-color]="cat.secondary_colour">
+              <p class="font-semibold" [style.color]="cat.primary_colour">{{ cat.name }}</p>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

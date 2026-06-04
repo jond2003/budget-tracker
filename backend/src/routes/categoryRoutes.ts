@@ -1,6 +1,6 @@
 import { Router } from "express";
 import requireLogin from "../middlewares/loginHandler";
-import { createCategory, deleteCategory, getCategories, getCategoryByName, getIncomeCategories, getTransactionCategories } from "../controllers/category.controller";
+import { createCategory, deleteCategory, getCategories, getCategoryByName, getIncomeCategories, getTransactionCategories, updateCategory } from "../controllers/category.controller";
 
 const router = Router();
 
@@ -10,6 +10,8 @@ router.post('/', requireLogin, createCategory);
 router.get('/income', requireLogin, getIncomeCategories);
 router.get('/transaction', requireLogin, getTransactionCategories);
 router.get('/:name', requireLogin, getCategoryByName);
+
+router.put('/', requireLogin, updateCategory);
 
 router.delete('/:id', requireLogin, deleteCategory);
 
