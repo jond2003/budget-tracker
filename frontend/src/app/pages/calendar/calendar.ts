@@ -9,6 +9,8 @@ import { FormGroup } from '@angular/forms';
 import { Payment } from '../../models/payment.model';
 import { MoneyCard } from "../../components/money-card/money-card";
 import { BudgetApiService } from '../../services/api/budgets/budget-api.service';
+import { CategoriesApiService } from '../../services/api/categories/categories-api.service';
+import { Category } from '../../models/category.model';
 
 @Component({
   selector: 'app-calendar',
@@ -25,9 +27,12 @@ export class Calendar {
   };
   
   incomes = signal<Payment[]>([]);
-  transactions = signal<Payment[]>([] as any);
-  pendingIncomes = signal<Payment[]>([] as any);
+  transactions = signal<Payment[]>([]);
+  pendingIncomes = signal<Payment[]>([]);
   netWorth = signal<number>(0);
+  categories = signal<Category[]>([]);
+  filteredTransactions = signal<Payment[]>([]);
+  filteredIncomes = signal<Payment[]>([]);
 
   income = computed(() => this.incomes().reduce((acc: number, c: any) => acc + c.amount, 0));
   expenses = computed(() => this.transactions().reduce((acc: number, c: any) => acc + c.amount, 0));
@@ -40,9 +45,11 @@ export class Calendar {
     private incomeApiService: IncomeApiService,
     private transactionApiService: TransactionsApiService,
     public calendarService: CalendarService,
-    private budgetApiService: BudgetApiService
+    private budgetApiService: BudgetApiService,
+    private categoryApiService: CategoriesApiService
   ) {
     this.updateMonth();
+    this.getCategories();
   }
 
   updateMonth(): void {
@@ -63,7 +70,7 @@ export class Calendar {
   }
 
   incrementMonth(i: number): void {
-    let d = new Date(this.calendarService.getYear(), this.calendarService.getMonth() + i, this.calendarService.getDate().getDate());
+    let d = new Date(this.calendarService.getYear(), this.calendarService.getMonth() + i, 1);
     this.calendarService.setDate(d);
     this.selectedDay = 0;
     this.updateMonth();
@@ -120,7 +127,7 @@ export class Calendar {
     );
     this.incomeApiService.getIncomesByMonth(prevMonth).subscribe(
       (res) => {
-        this.incomes.set(res as any);
+        this.incomes.set(res);
       }
     );
   }
@@ -128,16 +135,18 @@ export class Calendar {
   getPendingIncomes() {
     this.incomeApiService.getIncomesByMonth(this.month.date).subscribe(
       (res) => {
-        this.pendingIncomes.set(res as any);
+        this.pendingIncomes.set(res);
+        this.filteredIncomes.set(res);
         this.getNetWorth();
       }
     );
   }
   
   getMonthTransactions() {
-    this.transactionApiService.getIncomesByMonth(this.month.date).subscribe(
+    this.transactionApiService.getTransactionsByMonth(this.month.date).subscribe(
       (res) => {
-        this.transactions.set(res as any);
+        this.transactions.set(res);
+        this.filteredTransactions.set(res);
         this.getNetWorth();
       }
     );
@@ -167,5 +176,21 @@ export class Calendar {
       payment_date: form.get('payment_date')?.value as number
     }
     this.incomeApiService.createIncome(income).subscribe(() => this.getPendingIncomes());
+  }
+
+  getCategories(): void {
+    this.categoryApiService.getCategories().subscribe(res => this.categories.set(res));
+  }
+
+  filterTrxCategories(e: Event): void {
+    const categoryId = (e.target as HTMLSelectElement).value;
+    categoryId ? this.filteredTransactions.set(this.transactions().filter(t => t.category_id == categoryId)) : this.filteredTransactions.set(this.transactions());
+    // this.transactionApiService.getTransactionsByMonthCategory(this.month.date, categoryId).subscribe(res => this.filteredTransactions.set(res));
+  }
+
+  filterIncomeCategories(e: Event): void {
+    const categoryId = (e.target as HTMLSelectElement).value;
+    categoryId ? this.filteredIncomes.set(this.pendingIncomes().filter(i => i.category_id == categoryId)) : this.filteredIncomes.set(this.pendingIncomes());
+    // this.transactionApiService.getTransactionsByMonthCategory(this.month.date, categoryId).subscribe(res => this.filteredTransactions.set(res));
   }
 }

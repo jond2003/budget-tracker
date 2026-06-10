@@ -9,7 +9,7 @@
         <th class="p-2 text-right">Delete?</th>
       </tr>
       @if (showCreateForm()) {
-        <tr class="border text-left">
+        <tr class="border text-left text-sm">
           <td class="p-2">
             <input #firstInput class="outline-0 border-b" id="label" type="text" formControlName="label" placeholder="Enter a label" />
           </td>
@@ -17,7 +17,7 @@
             <select class="outline-0 border-b" id="category_id" type="text" formControlName="category_id">
               <option [value]="''" disabled selected>Select a category</option>
               @for (cat of categories(); track $index) {
-                <option [value]="cat._id" [style.color]="cat.colour" [style.background-color]="getBackgroundColor(cat.colour!)">{{ cat.name }}</option>
+                <option [value]="cat._id" [style.color]="cat.primary_colour" [style.background-color]="cat.secondary_colour">{{ cat.name }}</option>
               }
             </select>
           </td>
@@ -35,9 +35,14 @@
         </tr>
       }
       @for (t of payments(); track $index) {
-        <tr class="border border-black" [ngClass]="disableRow() == $index ? 'pointer-events-none' : 'pointer-events-auto'" [style.background-color]="categories().find(v => v._id == t.category_id)?.colour" [style.color]="getTextColor(categories().find(v => v._id == t.category_id)?.colour!)">
+        <tr class="border border-black text-sm" [ngClass]="disableRow() == $index ? 'pointer-events-none' : 'pointer-events-auto'">
           <td class="p-2">{{ t.label }}</td>
-          <td class="p-2">{{ categories().find(v => v._id == t.category_id)?.name }}</td>
+          <td>
+            <div class="px-2 w-fit rounded-4xl border" [style.background-color]="categories().find(v => v._id == t.category_id)?.secondary_colour">
+              <p class="font-semibold" [style.color]="categories().find(v => v._id == t.category_id)?.primary_colour">{{ categories().find(v => v._id == t.category_id)?.name }}</p>
+            </div>
+          </td>
+          <!-- <td class="p-2">{{ categories().find(v => v._id == t.category_id)?.name }}</td> -->
           <td class="p-2">{{ t.amount | currency: 'GBP' }}</td>
           @if (showDate()) { <td class="p-2">{{ t.payment_date | date }}</td> }
           @if (rowToDelete() == $index) {
