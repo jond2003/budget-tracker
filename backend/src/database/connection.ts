@@ -14,7 +14,7 @@ const initIndexes = async () => {
   // Categories
   const categories = db.collection(Collections.CATEGORIES);
   await categories.createIndex(
-    { name: 1 },
+    { user_id: 1, name: 1 },
     { unique: true }
   );
 };

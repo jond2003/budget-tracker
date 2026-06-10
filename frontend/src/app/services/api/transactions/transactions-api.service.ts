@@ -50,7 +50,7 @@ export class TransactionsApiService {
     return this.catsTrns[category_id].data;
   }
 
-  getIncomesByMonth(date: Date, forceUpdate = false): Observable<Payment[]> {
+  getTransactionsByMonth(date: Date, forceUpdate = false): Observable<Payment[]> {
     const key = date.getMonth() + '/' + date.getFullYear();
     // Create store if not created already
     if (!this.monthTrxns[key]) {
@@ -64,6 +64,10 @@ export class TransactionsApiService {
     this.monthTrxns[key].data = this.http.get<Payment[]>(API.MONTH_TRANSACTIONS + date, { responseType: 'json', withCredentials: true });
     this.monthTrxns[key].update = false;
     return this.monthTrxns[key].data
+  }
+  
+  getTransactionsByMonthCategory(date: Date, category_id: string, forceUpdate = false): Observable<Payment[]> {
+    return this.http.get<Payment[]>(API.MONTH_CATEGORY_TRANSACTIONS(date, category_id), { responseType: 'json', withCredentials: true });
   }
 
   deleteTransaction(trx: Payment): Observable<any> {

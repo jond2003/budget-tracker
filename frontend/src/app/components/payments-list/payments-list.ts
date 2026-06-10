@@ -112,34 +112,4 @@ export class PaymentsList implements OnInit {
     this.onCreatePayment.emit(this.form);
     this.showCreateForm.set(false);
   }
-
-  getTextColor(hex: string, negative=false): string {
-    // remove #
-    if (!hex) return '#ffffff'
-    hex = hex.replace('#', '');
-
-    // support shorthand (#fff)
-    if (hex.length === 3) {
-      hex = hex
-        .split('')
-        .map(c => c + c)
-        .join('');
-    }
-
-    const r = parseInt(hex.substring(0, 2), 16);
-    const g = parseInt(hex.substring(2, 4), 16);
-    const b = parseInt(hex.substring(4, 6), 16);
-
-    // perceived brightness
-    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-
-    const checkColour = brightness > 64 ? '#000000' : '#ffffff';
-    const checkNegativeColour = brightness > 192 ? '#000000' : '#ffffff';
-
-    return negative ? checkNegativeColour : checkColour;
-  }
-
-  getBackgroundColor(hex: string) {
-    return this.getTextColor(hex, true);
-  }
 }

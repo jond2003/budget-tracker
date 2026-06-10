@@ -25,11 +25,20 @@
     </div>
     
     <div>
-      <label for="colour">Pick a colour: </label>
+      <label for="primary_colour">Text colour: </label>
       <input
-        id="colour"
+        id="primary_colour"
         type="color"
-        formControlName="colour"
+        formControlName="primary_colour"
+      />
+    </div>
+    
+    <div>
+      <label for="secondary_colour">Background colour: </label>
+      <input
+        id="secondary_colour"
+        type="color"
+        formControlName="secondary_colour"
       />
     </div>
     <button type="submit" [disabled]="form.invalid">Submit</button>
@@ -38,15 +47,34 @@
 </div>
 
 <div>
+  <p>Preview</p>
+  <div class="px-2 w-fit rounded-4xl border" [style.background-color]="form.get('secondary_colour')?.value">
+    <p class="font-semibold" [style.color]="form.get('primary_colour')?.value">{{ form.get('name')?.value }}</p>
+  </div>
+</div>
+
+<div>
   <br>
   <div>Categories:</div>
   <div class="w-fit">
     @for (cat of categories(); track $index) {
-      <div class="flex justify-start gap-1">
-        <p>{{ cat.name }}</p>
-        <p class="w-2" [style.background-color]="cat.colour"></p>
+      <div class="flex justify-start gap-1 my-1">
+        <div class="px-2 w-fit rounded-4xl border" [style.background-color]="cat.secondary_colour">
+          <p class="font-semibold" [style.color]="cat.primary_colour">{{ cat.name }}</p>
+        </div>
         <p>{{ cat.payment_type }}</p>
+        @if (rowToDelete() == $index) {
+          <p>
+            <span class="cursor-pointer" (click)="deleteRow()">Y</span> / <span class="cursor-pointer" (click)="cancelDeleteRow()">N</span>
+          </p>
+        }
+        @else { <p class="cursor-pointer" [ngClass]="rowToDelete() != -1 && rowToDelete() != $index ? 'pointer-events-none' : 'pointer-events-auto'" (click)="confirmDeleteRow($index)">O</p> }
+        <button class="cursor-pointer bg-gray-200 px-2" (click)="editRow($index)">Edit</button>
       </div>
     }
   </div>
 </div>
+
+@if (openEditModal()) { <app-edit [data]="categories()[rowToEdit()]" formType="category" (onClose)="closeModal()", (onFormSubmit)="editCategory($event)"/> }
+
+<app-category-dropdown [categories]="categories().filter(cat => cat.payment_type == 'transaction')" />

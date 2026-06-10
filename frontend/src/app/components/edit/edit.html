@@ -1,0 +1,50 @@
+<div class="w-full h-full absolute top-0 left-0 bg-black/15 flex justify-center items-center" (click)="closeModal()">
+  <div class="p-6 bg-white" (click)="$event.stopPropagation()">
+    <form [formGroup]="form" (ngSubmit)="submitForm()">
+      @switch (formType()) {
+        @case ('category') {
+          <div class="flex items-center gap-2">
+            <div class="px-2 w-fit rounded-4xl border" [style.background-color]="form.get('new_secondary_colour')?.value">
+              <p class="font-semibold" [style.color]="form.get('new_primary_colour')?.value">{{ form.get('new_name')?.value }}</p>
+            </div>
+            <p>{{ data().payment_type | titlecase }}</p>
+          </div>
+          <div>
+            <div>
+              <label for="new_name">Name: </label>
+              <input
+                id="new_name"
+                type="text"
+                formControlName="new_name"
+                placeholder="Enter a new category name"
+                class="outline-none border-b-2"
+              />
+            </div>
+            
+            <div>
+              <label for="new_primary_colour">Text colour: </label>
+              <input
+                id="new_primary_colour"
+                type="color"
+                formControlName="new_primary_colour"
+              />
+            </div>
+            
+            <div>
+              <label for="new_secondary_colour">Background colour: </label>
+              <input
+                id="new_secondary_colour"
+                type="color"
+                formControlName="new_secondary_colour"
+              />
+            </div>
+            <div class="flex gap-2 justify-end">
+              <button class="cursor-pointer bg-gray-200 p-2" type="submit" [disabled]="form.invalid">Update</button>
+              <button class="cursor-pointer bg-gray-200 p-2" type="button" (click)="closeModal()">Cancel</button>
+            </div>
+          </div>
+        }
+      }
+    </form>
+  </div>
+</div>

@@ -40,4 +40,15 @@ export class CategoriesApiService {
     this.catsStore[category.payment_type].update = true;
     return this.http.post(API.CATEGORIES_BASE_URL, category, { responseType: 'json', withCredentials: true });
   }
+
+  editCategory(updatedCat: Category): Observable<any> {
+    this.catsStore[updatedCat.payment_type].update = true;
+    return this.http.put(API.CATEGORIES_BASE_URL, updatedCat, { responseType: 'json', withCredentials: true });
+  }
+  
+  deleteCategory(category: Category): Observable<any> {
+    const payType = category.payment_type;
+    this.catsStore[payType].update = true;
+    return this.http.delete(API.CATEGORIES_BASE_URL + category._id, { responseType: 'json', withCredentials: true });
+  }
 }

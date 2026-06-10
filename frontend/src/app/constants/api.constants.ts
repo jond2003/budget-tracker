@@ -12,7 +12,7 @@ export  namespace API {
   export const TRANSACTIONS_BASE_URL = BASE_URL + 'transactions/';
   export const CATEGORY_TRANSACTIONS = TRANSACTIONS_BASE_URL + 'category/';
   export const MONTH_TRANSACTIONS = TRANSACTIONS_BASE_URL + 'month/';
-  export const MONTH_CATEGORY_TRANSACTIONS = (date: string, category_id: string) => {
+  export const MONTH_CATEGORY_TRANSACTIONS = (date: Date, category_id: string) => {
     return MONTH_TRANSACTIONS + date + '/category/' + category_id;
   };
 

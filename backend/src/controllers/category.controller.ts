@@ -17,12 +17,13 @@ export const getCategories = async (req: Request, res: Response, next: NextFunct
 export const createCategory = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = new ObjectId(req.session.userId);
-    const { name, colour, payment_type } = req.body;
+    const { name, primary_colour, secondary_colour, payment_type } = req.body;
 
     const newCategory: Category = {
       user_id: userId,
       name,
-      colour,
+      primary_colour,
+      secondary_colour,
       payment_type
     };
 
@@ -68,9 +69,27 @@ export const getTransactionCategories = async (req: Request, res: Response, next
   }
 }
 
+export const updateCategory = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { _id, name, primary_colour, secondary_colour } = req.body;
+    const updatedFields: Partial<Category> = {
+      name,
+      primary_colour,
+      secondary_colour
+    }
+
+    const updatedCategory = await CategoriesCollection.updateCategory(new ObjectId(_id), updatedFields);
+
+    if (!updatedCategory) res.status(404).send({ message: 'Category not found' });
+    else res.send(updatedCategory).status(200);
+  } catch (err) {
+    next(err); 
+  }
+}
+
 export const deleteCategory = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const deletedCategory = await CategoriesCollection.deleteCategory(new ObjectId(req.params.id![0]));
+    const deletedCategory = await CategoriesCollection.deleteCategory(new ObjectId(req.params.id! as string));
 
     if (!deletedCategory) res.send("Not found").status(404);
     else res.send(deletedCategory).status(200);
