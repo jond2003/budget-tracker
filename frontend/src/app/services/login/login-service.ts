@@ -4,7 +4,6 @@ import { UserModel } from '../../models/user.model';
 import { HttpClient } from '@angular/common/http';
 import { FormGroup } from '@angular/forms';
 import { API } from '../../constants/api.constants';
-import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +12,7 @@ export class LoginService {
   private loggedInSubject = new BehaviorSubject(false);
   loggedIn$ = this.loggedInSubject.asObservable();
 
-  constructor(private http: HttpClient, private cookieService: CookieService) {
+  constructor(private http: HttpClient) {
     this.checkLoggedIn();
   }
 
@@ -56,7 +55,6 @@ export class LoginService {
   logout(): Observable<Object> {
     try {
       const res = this.http.post(API.LOGOUT, {}, { withCredentials: true });
-      this.cookieService.delete('user');
       this.loggedInSubject.next(false);
       return res;
     }
@@ -66,11 +64,10 @@ export class LoginService {
   }
 
   getUserDetails(): Observable<UserModel.UserDetails> {
-    const res = this.http.get<UserModel.UserDetails>(API.USER_BASE_URL, { withCredentials: true });
-    res.subscribe((user) => {
-      this.cookieService.set('user', JSON.stringify(user));
-      this.loggedInSubject.next(true);
-    });
-    return res
+    return this.http.get<UserModel.UserDetails>(API.USER_BASE_URL, { withCredentials: true });
+  }
+
+  setLoggedIn(): void {
+    this.loggedInSubject.next(true);
   }
 }

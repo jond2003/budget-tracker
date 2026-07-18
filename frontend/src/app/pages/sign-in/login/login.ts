@@ -24,7 +24,7 @@ export class Login {
     this.loginService.login(this.form).subscribe(res => {
       if (res.ok) {
         this.router.navigate(['/'+ AppRoutes.CALENDAR]);
-        this.loginService.getUserDetails();
+        this.loginService.setLoggedIn();
       }
     });
   }
