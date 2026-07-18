@@ -8,8 +8,8 @@
   <div>
     
   <div class="mt-4 font-bold">Transactions</div>
-  <app-payments-list [payments]="transactions()" (onDeleteRow)="deleteTransaction($event)" (onCreatePayment)="createTransaction($event)" type="transaction" />
+  <app-payments-list [payments]="transactions()" (onDeleteRow)="deleteTransaction($event)" (onCreatePayment)="createTransaction($event)" type="transaction" (onEditRow)="editTransaction($event)" />
 
   <div class="mt-4 font-bold">Pending Income</div>
-  <app-payments-list [payments]="incomes()" (onDeleteRow)="deleteIncome($event)" (onCreatePayment)="createIncome($event)" type="income" />
+  <app-payments-list [payments]="incomes()" (onDeleteRow)="deleteIncome($event)" (onCreatePayment)="createIncome($event)" type="income" (onEditRow)="editIncome($event)" />
 </div>

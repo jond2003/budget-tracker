@@ -43,10 +43,8 @@ export class Register {
       if (res.ok) {
         this.loginService.login(this.form).subscribe((res) => {
           if (res.ok) this.router.navigate(['/'+ AppRoutes.CALENDAR]);
-          else console.log(res);
         });
       }
-      else console.log(res);
     });
   }
 }

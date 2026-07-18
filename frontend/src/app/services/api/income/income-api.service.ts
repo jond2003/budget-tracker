@@ -74,4 +74,9 @@ export class IncomeApiService {
     if (this.catsIncomes[income.category_id]) this.catsIncomes[income.category_id].update = true;
     return this.http.delete(API.INCOMES_BASE_URL + income._id, { responseType: 'json', withCredentials: true });
   }
+
+  editIncome(updatedInc: Payment): Observable<Payment> {
+    this.incomes.update = true;
+    return this.http.put<Payment>(API.INCOMES_BASE_URL, updatedInc, { responseType: 'json', withCredentials: true });
+  }
 }

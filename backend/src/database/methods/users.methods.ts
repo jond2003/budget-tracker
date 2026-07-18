@@ -66,4 +66,19 @@ export namespace UsersCollection {
       { returnDocument: 'after' }
     );
   }
+
+  export const getUserDetailsById = async (_id: ObjectId): Promise<Partial<User> | null> => {
+    return await collection.findOne(
+      { _id },
+      {
+        projection: {
+          _id: 1,
+          email: 1,
+          firstname: 1,
+          lastname: 1,
+          created_at: 1,
+        }
+      }
+    );
+  }
 }

@@ -7,8 +7,13 @@ import { Transactions } from './pages/transactions/transactions';
 import { Income } from './pages/income/income';
 import { Categories } from './pages/categories/categories';
 import { Budgets } from './pages/budgets/budgets';
+import { Home } from './pages/home/home';
 
 export const routes: Routes = [
+  {
+    path: AppRoutes.HOME,
+    component: Home
+  },
   {
     path: AppRoutes.CALENDAR,
     component: Calendar

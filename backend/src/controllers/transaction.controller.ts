@@ -83,6 +83,25 @@ export const getTransactionById = async (req: Request, res: Response, next: Next
   }
 }
 
+export const editTransaction = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { _id, label, category_id, amount, payment_date } = req.body;
+    const updatedFields: Partial<Transaction> = {
+      label,
+      category_id,
+      amount,
+      payment_date: new Date(payment_date)
+    }
+
+    const updatedTransaction = await TransactionsCollection.updateTransaction(new ObjectId(_id), updatedFields);
+
+    if (!updatedTransaction) res.status(404).send({ message: 'Transaction not found' });
+    else res.send(updatedTransaction).status(200);
+  } catch (err) {
+    next(err); 
+  }
+}
+
 export const deleteTransaction = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const deletedTransaction = await TransactionsCollection.deleteTransaction(new ObjectId(req.params.id! as string));

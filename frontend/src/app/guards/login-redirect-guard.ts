@@ -3,14 +3,17 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { catchError, map, of } from 'rxjs';
 import { AppRoutes } from '../constants/routes';
-import { API } from '../constants/api.constants';
+import { LoginService } from '../services/login/login-service';
 
 export const loginRedirectGuard: CanActivateFn = (route, state) => {
-  const http = inject(HttpClient);
+  const loginService = inject(LoginService);
   const router = inject(Router);
 
-  return http.get<{ authenticated: boolean }>(API.AUTH_USER, { withCredentials: true }).pipe(
-    map(() => router.createUrlTree(['/'+AppRoutes.TRANSACTIONS])),
+  return loginService.checkLoggedIn().pipe(
+    map((auth) => {
+      if (!auth.authenticated) return true;
+      return router.createUrlTree(['/'+AppRoutes.CALENDAR]);
+    }),
     catchError(() => of(true))
   );
 };

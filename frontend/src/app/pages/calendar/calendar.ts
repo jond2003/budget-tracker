@@ -19,7 +19,7 @@ import { Category } from '../../models/category.model';
   styleUrl: './calendar.css',
 })
 export class Calendar {
-  days: any[] = [];
+  days: number[][] = [];
   month = {
     date: new Date(),
     totalDays: 30,
@@ -38,8 +38,11 @@ export class Calendar {
   expenses = computed(() => this.transactions().reduce((acc: number, c: any) => acc + c.amount, 0));
   pendingIncome = computed(() => this.pendingIncomes().reduce((acc: number, c: any) => acc + c.amount, 0));
 
+  dayIncomes = computed(() => this.getDayIncomes(this.selectedDay()));
+  dayTransactions = computed(() => this.getDayTransactions(this.selectedDay()));
+
   showReceipt = false;
-  selectedDay = 0;
+  selectedDay = signal(0);
 
   constructor(
     private incomeApiService: IncomeApiService,
@@ -63,7 +66,7 @@ export class Calendar {
     for (let i = 0; i < arr.length; i += 7) {
       this.days.push(arr.slice(i, i + 7));
     }
-    // console.log(this.getDayWeekOffset(), this.days);
+    
     this.getMonthIncomes();
     this.getMonthTransactions();
     this.getPendingIncomes();
@@ -72,13 +75,13 @@ export class Calendar {
   incrementMonth(i: number): void {
     let d = new Date(this.calendarService.getYear(), this.calendarService.getMonth() + i, 1);
     this.calendarService.setDate(d);
-    this.selectedDay = 0;
+    this.selectedDay.set(0);
     this.updateMonth();
   }
 
   viewDay(d: number): void {
     this.showReceipt = true;
-    this.selectedDay = d;
+    this.selectedDay.set(d);
     this.month.date.setDate(d);
     this.calendarService.setDayOfMonth(d);
   }
@@ -185,12 +188,40 @@ export class Calendar {
   filterTrxCategories(e: Event): void {
     const categoryId = (e.target as HTMLSelectElement).value;
     categoryId ? this.filteredTransactions.set(this.transactions().filter(t => t.category_id == categoryId)) : this.filteredTransactions.set(this.transactions());
-    // this.transactionApiService.getTransactionsByMonthCategory(this.month.date, categoryId).subscribe(res => this.filteredTransactions.set(res));
   }
 
   filterIncomeCategories(e: Event): void {
     const categoryId = (e.target as HTMLSelectElement).value;
     categoryId ? this.filteredIncomes.set(this.pendingIncomes().filter(i => i.category_id == categoryId)) : this.filteredIncomes.set(this.pendingIncomes());
-    // this.transactionApiService.getTransactionsByMonthCategory(this.month.date, categoryId).subscribe(res => this.filteredTransactions.set(res));
+  }
+
+  editTransaction(updatedTrx: Payment) {
+    this.transactionApiService.editTransaction(updatedTrx).subscribe(newTrx => {
+      const newDate = new Date(newTrx.payment_date);
+      if (newDate.getMonth() == this.calendarService.getMonth()) {
+        this.transactions.update(arr => arr.map(t => t._id == newTrx._id ? newTrx : t));
+      }
+    });
+  }
+
+  editIncome(updatedInc: Payment) {
+    this.incomeApiService.editIncome(updatedInc).subscribe(newInc => {
+      const newDate = new Date(newInc.payment_date);
+      if (newDate.getMonth() == this.calendarService.getMonth()) {
+        this.incomes.update(arr => arr.map(income => income._id == newInc._id ? newInc : income));
+      }
+    });
+  }
+
+  deleteIncome(index: number): void {
+    this.incomeApiService.deleteIncome(this.incomes()[index]).subscribe(() => {
+      this.getMonthIncomes();
+    });
+  }
+
+  deleteTransaction(index: number): void {
+    this.transactionApiService.deleteTransaction(this.transactions()[index]).subscribe(() => {
+      this.getMonthTransactions();
+    });
   }
 }

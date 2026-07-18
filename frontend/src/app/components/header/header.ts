@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, signal, Signal } from '@angular/core';
 import { AppRoutes } from '../../constants/routes';
 import { Router, RouterLink } from '@angular/router';
 import { LoginService } from '../../services/login/login-service';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 interface NavItem {
   label: string;
@@ -24,7 +25,15 @@ export class Header {
     { label: 'Calendar', route: AppRoutes.CALENDAR }
   ];
 
-  constructor(private loginService: LoginService, private router: Router) { }
+  loginRoute = AppRoutes.LOGIN;
+  loggedIn: Signal<boolean | undefined>;
+
+  constructor(
+    private loginService: LoginService,
+    private router: Router
+  ) {
+    this.loggedIn = toSignal(this.loginService.loggedIn$);
+  }
 
   logout(): void {
     this.loginService.logout().subscribe(() => {

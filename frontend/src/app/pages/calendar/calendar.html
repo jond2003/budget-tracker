@@ -10,8 +10,8 @@
 
 <div class="m-4 flex bg-mist-900 px-6 py-8 rounded-2xl gap-4 items-stretch">
   <div class="flex-1 bg-white rounded-l-2xl p-4 relative">
-    @if (selectedDay) {
-      <app-receipt-modal class="overflow-y-auto absolute inset-0 p-4" [date]=calendarService.getDate() [transactions]="getDayTransactions(selectedDay)" [incomes]="getDayIncomes(selectedDay)" (updateIncomes)="getPendingIncomes()", (updateTransactions)="getMonthTransactions()" />
+    @if (selectedDay()) {
+      <app-receipt-modal class="overflow-y-auto absolute inset-0 p-4" [date]="calendarService.getDate()" [transactions]="dayTransactions()" [incomes]="dayIncomes()" (updateIncomes)="getPendingIncomes()", (updateTransactions)="getMonthTransactions()" />
     }
   </div>
   <div class="flex-1 bg-gray-100 p-4 rounded-r-2xl">
@@ -31,7 +31,7 @@
           <tr>
             @for (d of row; track d) {
               @if (d > 0) {
-                <td class="px-4 py-3 rounded-md text-sm cursor-pointer" [ngClass]="selectedDay == d ? 'bg-orange-200 text-black' : isRealCurrentMonth() && getRealCurrentDay() == d ? 'bg-gray-300 text-black' : 'bg-mist-800 text-white'" (click)="viewDay(d)">
+                <td class="px-4 py-3 rounded-md text-sm cursor-pointer" [ngClass]="selectedDay() == d ? 'bg-orange-200 text-black' : isRealCurrentMonth() && getRealCurrentDay() == d ? 'bg-gray-300 text-black' : 'bg-mist-800 text-white'" (click)="viewDay(d)">
                   <div>
                     <p class="font-bold">{{ d }}</p>
                     <!-- <p>{{ getDayTransactions(d).length }} transaction{{ getDayTransactions(d).length == 1 ? "" : "s"  }}</p> -->
@@ -71,10 +71,10 @@
   </div>
   <div class="flex w-full">
     <div class="flex-1 h-80 overflow-y-auto">
-      <app-payments-list [payments]="filteredTransactions()" showDate (onCreatePayment)="createIncome($event)" type="transaction" />
+      <app-payments-list [payments]="filteredTransactions()" showDate (onCreatePayment)="createIncome($event)" type="transaction" (onEditRow)="editTransaction($event)" (onDeleteRow)="deleteTransaction($event)" />
     </div>
     <div class="flex-1 h-80 overflow-y-auto">
-      <app-payments-list [payments]="filteredIncomes()" showDate (onCreatePayment)="createIncome($event)" type="income" />
+      <app-payments-list [payments]="filteredIncomes()" showDate (onCreatePayment)="createIncome($event)" type="income" (onEditRow)="editIncome($event)" (onDeleteRow)="deleteIncome($event)" />
     </div>
   </div>
 </div>

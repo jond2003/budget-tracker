@@ -22,7 +22,6 @@ export class CategoryDropdown {
   }
 
   selectCategory(i: number) {
-    console.log("selected");
     const category = this.categories()[i];
     this.selectedCategory.set(category);
     this.onSelectCategory.emit(category);

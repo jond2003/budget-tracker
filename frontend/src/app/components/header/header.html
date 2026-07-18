@@ -5,6 +5,11 @@
     }
   </div>
   <div>
-    <button (click)="logout()" class="cursor-pointer p-2">Logout</button>
+    @if (loggedIn()) {
+      <button (click)="logout()" class="cursor-pointer p-2">Logout</button>
+    }
+    @else {
+      <div [routerLink]="loginRoute" class="cursor-pointer p-2">Login</div>
+    }
   </div>
 </div>

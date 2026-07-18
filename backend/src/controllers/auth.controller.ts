@@ -6,9 +6,9 @@ export const authenticateUser = async (req: Request, res: Response, next: NextFu
       return res.json({ authenticated: true });
     }
 
-    return res.status(401).json({
+    return res.json({
       authenticated: false
-    });
+    }).status(401);
   } catch (err) {
     next(err); 
   }
