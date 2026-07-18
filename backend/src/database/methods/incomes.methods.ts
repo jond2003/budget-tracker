@@ -63,6 +63,15 @@ export namespace IncomesCollection {
       }
     ]).toArray())[0]?.total || 0;
   }
+    
+    // Update an income given its unique ID
+    export const updateIncome = async (_id: ObjectId, fieldsToUpdate: Partial<Income>): Promise<Income | null> => {
+      return await collection.findOneAndUpdate(
+        { _id },
+        { $set: fieldsToUpdate },
+        { returnDocument: "after" }
+      );
+    }
 
   // Delete a income given the ID
   export const deleteIncome = async (_id: ObjectId): Promise<Income | null> => {

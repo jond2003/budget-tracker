@@ -22,8 +22,10 @@ export class Login {
 
   onSubmit() {
     this.loginService.login(this.form).subscribe(res => {
-      if (res.ok) this.router.navigate(['/'+ AppRoutes.CALENDAR]);
-      else console.log(res);
+      if (res.ok) {
+        this.router.navigate(['/'+ AppRoutes.CALENDAR]);
+        this.loginService.getUserDetails();
+      }
     });
   }
 }

@@ -35,6 +35,35 @@
         </tr>
       }
       @for (t of payments(); track $index) {
+        @if (rowsToEdit.includes($index)) {
+          <ng-container [formGroup]="editForm">
+            <tr [formGroupName]="'edit-'+$index" class="border text-left text-sm">
+              <td class="p-2">
+                <input class="outline-0 border-b" id="label" type="text" formControlName="label" placeholder="Enter a label" />
+              </td>
+              <td class="p-2">
+                <select class="outline-0 border-b" id="category_id" type="text" formControlName="category_id">
+                  <option [value]="''" disabled selected>Select a category</option>
+                  @for (cat of categories(); track $index) {
+                    <option [value]="cat._id" [style.color]="cat.primary_colour" [style.background-color]="cat.secondary_colour">{{ cat.name }}</option>
+                  }
+                </select>
+              </td>
+              <td class="p-2">
+                £<input class="no-spinner outline-0 border-b w-12" id="amount" type="number" formControlName="amount" min="0" placeholder="0.00" />
+              </td>
+              @if (showDate()) {
+                <td class="p-2">
+                  <input id="payment_date" type="date" formControlName="payment_date" />
+                </td>
+              }
+              <td class="p-2 flex gap-2">
+                <div (click)="editRow($index)" class="cursor-pointer">Edit</div>
+                <div (click)="cancelEditRow($index)" class="cursor-pointer">Cancel</div>
+              </td>
+            </tr>
+          </ng-container>
+        } @else {
         <tr class="border border-black text-sm" [ngClass]="disableRow() == $index ? 'pointer-events-none' : 'pointer-events-auto'">
           <td class="p-2">{{ t.label }}</td>
           <td>
@@ -51,7 +80,8 @@
             </td>
           }
           @else { <td class="p-2 text-right cursor-pointer" [ngClass]="rowToDelete() != -1 && rowToDelete() != $index ? 'pointer-events-none' : 'pointer-events-auto'" (click)="confirmDeleteRow($index)">O</td> }
-        </tr>
+          <td (click)="enableEditing($index)" class="cursor-pointer">Edit</td>
+        </tr> }
       }
       <tr class="border font-bold">
         <td class="p-2">Total</td>

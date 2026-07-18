@@ -3,9 +3,11 @@ import { LoginErrors, RegisterErrors, Validation } from "../utils/validation.uti
 import { UsersCollection } from "../database/methods/users.methods";
 import { User, users } from "../models/user";
 import { genSalt, hashPassword } from "../utils/security.utils";
+import { ObjectId } from "mongodb";
 
 export const login = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    console.log("Logging in");
     if (req.session.userId) return res.send({ message: 'Already logged in' }).status(403);
 
     const { email, password } = req.body;
@@ -28,7 +30,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
 
     req.session.userId = user._id!.toString();
     users.push({ ...user });
-    res.send({ user_id: user._id, ok: true }).status(200);
+    res.send({ _id: user._id, ok: true }).status(200);
   } catch (error) {
     next(error);
   }
@@ -73,6 +75,18 @@ export const logout = async (req: Request, res: Response, next: NextFunction) =>
       res.send({ message: 'Logged out' });
     });
   } catch (err) {
+    next(err);
+  }
+}
+
+export const getUserDetails = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = new ObjectId(req.session.userId);
+    const userDetails = await UsersCollection.getUserDetailsById(userId);
+
+    if (userDetails) res.send(userDetails).status(200);
+  }
+  catch (err) {
     next(err);
   }
 }

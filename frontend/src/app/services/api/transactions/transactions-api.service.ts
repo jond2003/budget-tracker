@@ -70,6 +70,11 @@ export class TransactionsApiService {
     return this.http.get<Payment[]>(API.MONTH_CATEGORY_TRANSACTIONS(date, category_id), { responseType: 'json', withCredentials: true });
   }
 
+  editTransaction(updatedTrx: Payment): Observable<Payment> {
+    this.trns.update = true;
+    return this.http.put<Payment>(API.TRANSACTIONS_BASE_URL, updatedTrx, { responseType: 'json', withCredentials: true });
+  }
+
   deleteTransaction(trx: Payment): Observable<any> {
     const date = new Date(trx.payment_date);
     const key = date.getMonth() + '/' + date.getFullYear();

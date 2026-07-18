@@ -83,6 +83,25 @@ export const getCategoryIncomes = async (req: Request, res: Response, next: Next
   }
 }
 
+export const editIncome = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { _id, label, category_id, amount, payment_date } = req.body;
+    const updatedFields: Partial<Income> = {
+      label,
+      category_id,
+      amount,
+      payment_date: new Date(payment_date)
+    }
+
+    const updatedIncome = await IncomesCollection.updateIncome(new ObjectId(_id), updatedFields);
+
+    if (!updatedIncome) res.status(404).send({ message: 'Income not found' });
+    else res.send(updatedIncome).status(200);
+  } catch (err) {
+    next(err); 
+  }
+}
+
 export const deleteIncome = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const deletedIncome = await IncomesCollection.deleteIncome(new ObjectId(req.params.id! as string));

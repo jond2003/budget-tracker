@@ -10,4 +10,11 @@ export namespace UserModel {
     email: string;
     password: string;
   }
+
+  export interface UserDetails {
+    email: string;
+    firstname: string;
+    lastname: string;
+    created_at: Date;
+  }
 }

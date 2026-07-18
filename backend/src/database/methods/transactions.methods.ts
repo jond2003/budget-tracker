@@ -61,6 +61,15 @@ export namespace TransactionsCollection {
       }
     ]).toArray())[0]?.total || 0;
   }
+  
+  // Update a transaction given its unique ID
+  export const updateTransaction = async (_id: ObjectId, fieldsToUpdate: Partial<Transaction>): Promise<Transaction | null> => {
+    return await collection.findOneAndUpdate(
+      { _id },
+      { $set: fieldsToUpdate },
+      { returnDocument: "after" }
+    );
+  }
 
   // Delete a transaction given the ID
   export const deleteTransaction = async (_id: ObjectId): Promise<Transaction | null> => {

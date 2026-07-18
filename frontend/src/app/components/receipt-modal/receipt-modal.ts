@@ -59,4 +59,16 @@ export class ReceiptModal {
     }
     this.incomeApiService.createIncome(income).subscribe(() => this.updateIncomes.emit());
   }
+
+  editTransaction(updatedTrx: Payment) {
+    this.transactionApiService.editTransaction(updatedTrx).subscribe(newTrx => {
+      this.updateTransactions.emit();
+    });
+  }
+
+  editIncome(updatedInc: Payment) {
+    this.incomeApiService.editIncome(updatedInc).subscribe(newInc => {
+      this.updateIncomes.emit()
+    });
+  }
 }
