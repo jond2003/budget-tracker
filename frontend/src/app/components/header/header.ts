@@ -25,6 +25,8 @@ export class Header {
     { label: 'Calendar', route: AppRoutes.CALENDAR }
   ];
 
+  hamburgerOpen = signal(false);
+
   loginRoute = AppRoutes.LOGIN;
   loggedIn: Signal<boolean | undefined>;
 
@@ -36,8 +38,13 @@ export class Header {
   }
 
   logout(): void {
+    this.toggleHamburger();
     this.loginService.logout().subscribe(() => {
       this.router.navigate(['/' + AppRoutes.LOGIN]);
     });
+  }
+
+  toggleHamburger(): void {
+    this.hamburgerOpen.update(s => !s);
   }
 }

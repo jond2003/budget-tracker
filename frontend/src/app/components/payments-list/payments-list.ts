@@ -29,11 +29,6 @@ export class PaymentsList implements OnInit {
   type = input.required<'transaction' | 'income' | 'both'>();
 
   totalAmount = computed(() => this.payments().reduce((acc: number, c: any) => acc + c.amount, 0));
-  resetDisableRow = computed(() => {
-    const arr = this.payments();
-    this.disableRow.set(-1);
-    console.log('disable row', this.disableRow());
-  });
 
   onDeleteRow = output<number>();
   onCreatePayment = output<FormGroup>();
@@ -60,6 +55,8 @@ export class PaymentsList implements OnInit {
       Object.keys(this.editForm.controls).forEach(key => {
         this.editForm.removeControl(key);
       });
+      this.disableRow.set(-1);
+      this.rowToDelete.set(-1);
     });
   }
 

@@ -1,15 +1,37 @@
-<div class="flex justify-between p-2">
-  <div class="flex">
+<div class="flex justify-end sm:justify-between p-2 relative">
+  <div class="hidden sm:flex">
     @for (item of navLinks; track $index) {
-      <div class="cursor-pointer p-2" [routerLink]="item.route">{{ item.label }}</div>
+      <div class="cursor-pointer p-2" (click)="toggleHamburger()" [routerLink]="item.route">{{ item.label }}</div>
     }
   </div>
-  <div>
+  <div class="hidden sm:block">
     @if (loggedIn()) {
-      <button (click)="logout()" class="cursor-pointer p-2">Logout</button>
+      <div (click)="logout()" class="cursor-pointer p-2">Logout</div>
     }
     @else {
-      <div [routerLink]="loginRoute" class="cursor-pointer p-2">Login</div>
+      <div [routerLink]="loginRoute" (click)="toggleHamburger()" class="cursor-pointer p-2">Login</div>
     }
   </div>
+  <div class="sm:hidden cursor-pointer h-10 w-10 p-2" (click)="toggleHamburger()">
+    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 50 50">
+      <path d="M 0 9 L 0 11 L 50 11 L 50 9 Z M 0 24 L 0 26 L 50 26 L 50 24 Z M 0 39 L 0 41 L 50 41 L 50 39 Z"></path>
+    </svg>
+  </div>
+
+  <!-- Hamburger Menu -->
+  @if (hamburgerOpen()) {
+    <div class="absolute w-full top-14 left-0 border-b">
+      <div class="flex flex-col bg-white">
+        @for (item of navLinks; track $index) {
+          <div class="cursor-pointer p-2 px-4 hover:bg-gray-100" (click)="toggleHamburger()" [routerLink]="item.route">{{ item.label }}</div>
+        }
+        @if (loggedIn()) {
+          <div (click)="logout()" class="cursor-pointer p-2 px-4 hover:bg-gray-100">Logout</div>
+        }
+        @else {
+          <div [routerLink]="loginRoute" (click)="toggleHamburger()" class="cursor-pointer p-2 px-4 hover:bg-gray-100">Login</div>
+        }
+      </div>
+    </div>
+  }
 </div>

@@ -1,4 +1,4 @@
-<div class="flex w-full">
+<div class="flex flex-col-reverse w-full">
   <form class="w-full" [formGroup]="form" (ngSubmit)="createPayment()">
     <table class="w-full">
       <tr class="border text-left">
@@ -6,7 +6,12 @@
         <th class="p-2">Category</th>
         <th class="p-2">Amount</th>
         @if (showDate()) { <th class="p-2">Date</th> }
-        <th class="p-2 text-right">Delete?</th>
+        <th class="p-2 text-right">
+          <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 48 48" >
+            <path d="M 24 4 C 20.491685 4 17.570396 6.6214322 17.080078 10 L 10.238281 10 A 1.50015 1.50015 0 0 0 9.9804688 9.9785156 A 1.50015 1.50015 0 0 0 9.7578125 10 L 6.5 10 A 1.50015 1.50015 0 1 0 6.5 13 L 8.6386719 13 L 11.15625 39.029297 C 11.427329 41.835926 13.811782 44 16.630859 44 L 31.367188 44 C 34.186411 44 36.570826 41.836168 36.841797 39.029297 L 39.361328 13 L 41.5 13 A 1.50015 1.50015 0 1 0 41.5 10 L 38.244141 10 A 1.50015 1.50015 0 0 0 37.763672 10 L 30.919922 10 C 30.429604 6.6214322 27.508315 4 24 4 z M 24 7 C 25.879156 7 27.420767 8.2681608 27.861328 10 L 20.138672 10 C 20.579233 8.2681608 22.120844 7 24 7 z M 11.650391 13 L 36.347656 13 L 33.855469 38.740234 C 33.730439 40.035363 32.667963 41 31.367188 41 L 16.630859 41 C 15.331937 41 14.267499 40.033606 14.142578 38.740234 L 11.650391 13 z M 20.476562 17.978516 A 1.50015 1.50015 0 0 0 19 19.5 L 19 34.5 A 1.50015 1.50015 0 1 0 22 34.5 L 22 19.5 A 1.50015 1.50015 0 0 0 20.476562 17.978516 z M 27.476562 17.978516 A 1.50015 1.50015 0 0 0 26 19.5 L 26 34.5 A 1.50015 1.50015 0 1 0 29 34.5 L 29 19.5 A 1.50015 1.50015 0 0 0 27.476562 17.978516 z"></path>
+          </svg>
+        </th>
+        <th>Edit</th>
       </tr>
       @if (showCreateForm()) {
         <tr class="border text-left text-sm">
@@ -57,7 +62,7 @@
                   <input id="payment_date" type="date" formControlName="payment_date" />
                 </td>
               }
-              <td class="p-2 flex gap-2">
+              <td class="p-2 flex gap-2 select-none">
                 <div (click)="editRow($index)" class="cursor-pointer">Edit</div>
                 <div (click)="cancelEditRow($index)" class="cursor-pointer">Cancel</div>
               </td>
@@ -65,22 +70,30 @@
           </ng-container>
         } @else {
         <tr class="border border-black text-sm" [ngClass]="disableRow() == $index ? 'pointer-events-none' : 'pointer-events-auto'">
-          <td class="p-2">{{ t.label }}</td>
+          <td class="p-2 select-none">{{ t.label }}</td>
           <td>
             <div class="px-2 w-fit rounded-4xl border" [style.background-color]="categories().find(v => v._id == t.category_id)?.secondary_colour">
-              <p class="font-semibold" [style.color]="categories().find(v => v._id == t.category_id)?.primary_colour">{{ categories().find(v => v._id == t.category_id)?.name }}</p>
+              <p class="font-semibold text-nowrap" [style.color]="categories().find(v => v._id == t.category_id)?.primary_colour">{{ categories().find(v => v._id == t.category_id)?.name }}</p>
             </div>
           </td>
           <!-- <td class="p-2">{{ categories().find(v => v._id == t.category_id)?.name }}</td> -->
           <td class="p-2">{{ t.amount | currency: 'GBP' }}</td>
-          @if (showDate()) { <td class="p-2">{{ t.payment_date | date }}</td> }
+          @if (showDate()) { <td class="p-2 text-nowrap">{{ t.payment_date | date }}</td> }
           @if (rowToDelete() == $index) {
             <td class="p-2 text-right">
-              <span class="cursor-pointer" (click)="deleteRow()">Y</span> / <span class="cursor-pointer" (click)="cancelDeleteRow()">N</span>
+              <span class="cursor-pointer select-none" (click)="deleteRow()">Y</span> / <span class="cursor-pointer" (click)="cancelDeleteRow()">N</span>
             </td>
           }
-          @else { <td class="p-2 text-right cursor-pointer" [ngClass]="rowToDelete() != -1 && rowToDelete() != $index ? 'pointer-events-none' : 'pointer-events-auto'" (click)="confirmDeleteRow($index)">O</td> }
-          <td (click)="enableEditing($index)" class="cursor-pointer">Edit</td>
+          @else {
+            <td class="p-2 text-right cursor-pointer select-none" [ngClass]="rowToDelete() != -1 && rowToDelete() != $index ? 'pointer-events-none' : 'pointer-events-auto'">
+              <div (click)="confirmDeleteRow($index)">
+                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 48 48" >
+                  <path d="M 24 4 C 20.491685 4 17.570396 6.6214322 17.080078 10 L 10.238281 10 A 1.50015 1.50015 0 0 0 9.9804688 9.9785156 A 1.50015 1.50015 0 0 0 9.7578125 10 L 6.5 10 A 1.50015 1.50015 0 1 0 6.5 13 L 8.6386719 13 L 11.15625 39.029297 C 11.427329 41.835926 13.811782 44 16.630859 44 L 31.367188 44 C 34.186411 44 36.570826 41.836168 36.841797 39.029297 L 39.361328 13 L 41.5 13 A 1.50015 1.50015 0 1 0 41.5 10 L 38.244141 10 A 1.50015 1.50015 0 0 0 37.763672 10 L 30.919922 10 C 30.429604 6.6214322 27.508315 4 24 4 z M 24 7 C 25.879156 7 27.420767 8.2681608 27.861328 10 L 20.138672 10 C 20.579233 8.2681608 22.120844 7 24 7 z M 11.650391 13 L 36.347656 13 L 33.855469 38.740234 C 33.730439 40.035363 32.667963 41 31.367188 41 L 16.630859 41 C 15.331937 41 14.267499 40.033606 14.142578 38.740234 L 11.650391 13 z M 20.476562 17.978516 A 1.50015 1.50015 0 0 0 19 19.5 L 19 34.5 A 1.50015 1.50015 0 1 0 22 34.5 L 22 19.5 A 1.50015 1.50015 0 0 0 20.476562 17.978516 z M 27.476562 17.978516 A 1.50015 1.50015 0 0 0 26 19.5 L 26 34.5 A 1.50015 1.50015 0 1 0 29 34.5 L 29 19.5 A 1.50015 1.50015 0 0 0 27.476562 17.978516 z"></path>
+                </svg>
+              </div>
+            </td>
+          }
+          <td (click)="enableEditing($index)" class="cursor-pointer select-none">Edit</td>
         </tr> }
       }
       <tr class="border font-bold">
@@ -91,6 +104,6 @@
     </table>
   </form>
   <div>
-    <div class="cursor-pointer font-bold text-2xl p-1" (click)="toggleForm()">@if (showCreateForm()) { - } @else { + }</div>
+    <div class="cursor-pointer font-bold text-2xl inline float-right" (click)="toggleForm()">@if (showCreateForm()) { - } @else { + }</div>
   </div>
 </div>
