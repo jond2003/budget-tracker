@@ -1,7 +1,7 @@
 <div class="flex justify-end sm:justify-between p-2 relative">
   <div class="hidden sm:flex">
     @for (item of navLinks; track $index) {
-      <div class="cursor-pointer p-2" (click)="toggleHamburger()" [routerLink]="item.route">{{ item.label }}</div>
+      <div class="cursor-pointer p-2" [routerLink]="item.route">{{ item.label }}</div>
     }
   </div>
   <div class="hidden sm:block">
@@ -9,7 +9,7 @@
       <div (click)="logout()" class="cursor-pointer p-2">Logout</div>
     }
     @else {
-      <div [routerLink]="loginRoute" (click)="toggleHamburger()" class="cursor-pointer p-2">Login</div>
+      <div [routerLink]="loginRoute" class="cursor-pointer p-2">Login</div>
     }
   </div>
   <div class="sm:hidden cursor-pointer h-10 w-10 p-2" (click)="toggleHamburger()">
@@ -20,7 +20,7 @@
 
   <!-- Hamburger Menu -->
   @if (hamburgerOpen()) {
-    <div class="absolute w-full top-14 left-0 border-b">
+    <div class="absolute w-full top-14 left-0 border-b sm:hidden">
       <div class="flex flex-col bg-white">
         @for (item of navLinks; track $index) {
           <div class="cursor-pointer p-2 px-4 hover:bg-gray-100" (click)="toggleHamburger()" [routerLink]="item.route">{{ item.label }}</div>

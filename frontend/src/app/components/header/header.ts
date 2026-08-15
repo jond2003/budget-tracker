@@ -38,7 +38,7 @@ export class Header {
   }
 
   logout(): void {
-    this.toggleHamburger();
+    this.hamburgerOpen() && this.toggleHamburger();
     this.loginService.logout().subscribe(() => {
       this.router.navigate(['/' + AppRoutes.LOGIN]);
     });
