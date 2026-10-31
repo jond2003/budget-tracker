@@ -11,10 +11,11 @@ import { MoneyCard } from "../../components/money-card/money-card";
 import { BudgetApiService } from '../../services/api/budgets/budget-api.service';
 import { CategoriesApiService } from '../../services/api/categories/categories-api.service';
 import { Category } from '../../models/category.model';
+import { PieBreakdown } from '../../components/pie-breakdown/pie-breakdown';
 
 @Component({
   selector: 'app-calendar',
-  imports: [ReceiptModal, NgClass, DecimalPipe, PaymentsList, MoneyCard],
+  imports: [ReceiptModal, NgClass, DecimalPipe, PaymentsList, MoneyCard, PieBreakdown],
   templateUrl: './calendar.html',
   styleUrl: './calendar.css',
 })
